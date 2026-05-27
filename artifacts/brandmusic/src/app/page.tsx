@@ -539,26 +539,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Closing CTA */}
-      <section className="py-24 border-t border-[var(--color-border-subtle)]">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="h-display text-[32px] md:text-[40px]">
-            Find your sound.
-          </h2>
-          <p className="mt-4 text-[15px] text-[var(--color-text-secondary)]">
-            Start with a search. No account required.
-          </p>
-          <div className="mt-7 flex items-center justify-center gap-3">
-            <Link href="/library">
-              <Button size="md">Browse the library</Button>
-            </Link>
-            <Link href="/features">
-              <Button size="md" variant="outline">See what's inside</Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       <Footer />
     </main>
   )
