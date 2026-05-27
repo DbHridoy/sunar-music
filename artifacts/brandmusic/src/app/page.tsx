@@ -50,27 +50,6 @@ const stats = [
   { value: '100%', label: 'Stems on every release' },
 ]
 
-const testimonials = [
-  {
-    quote:
-      'We used to spend hours scrolling stock libraries for one cue. Now we describe the brief and the right tracks surface in seconds.',
-    name: 'Maya Okafor',
-    role: 'Creative Director, Northwind',
-  },
-  {
-    quote:
-      'Sync preview against our edit before licensing changed our review cycle. Clients pick faster, we close faster.',
-    name: 'Diego Ramos',
-    role: 'Executive Producer, Field Studio',
-  },
-  {
-    quote:
-      'Stems on every track is the unlock. Our post team can shape any cue to fit the brand, not the other way around.',
-    name: 'Hannah Liu',
-    role: 'Head of Brand, Lumen Labs',
-  },
-]
-
 const plans = [
   {
     name: 'Starter',
@@ -352,36 +331,6 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 border-t border-[var(--color-border-subtle)]">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="max-w-2xl mb-12">
-            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
-              Field reports
-            </span>
-            <h2 className="h-display text-[32px] md:text-[40px] mt-3">
-              Teams shipping with Brandmusic.
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-3">
-            {testimonials.map((t) => (
-              <figure
-                key={t.name}
-                className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-6 flex flex-col"
-              >
-                <blockquote className="text-[14px] text-[var(--color-text-primary)] leading-relaxed">
-                  “{t.quote}”
-                </blockquote>
-                <figcaption className="mt-6 pt-5 border-t border-[var(--color-border-subtle)]">
-                  <div className="text-[13px] text-[var(--color-text-primary)]">{t.name}</div>
-                  <div className="text-[12px] text-[var(--color-text-tertiary)]">{t.role}</div>
-                </figcaption>
-              </figure>
-            ))}
           </div>
         </div>
       </section>
