@@ -183,15 +183,6 @@ export default function Home() {
       <section className="relative pt-32 pb-24 overflow-hidden">
         <div className="absolute inset-0 bg-grid bg-grid-fade pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 mb-7 px-2.5 py-1 rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface)]">
-            <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
-              New
-            </span>
-            <span className="text-[12px] text-[var(--color-text-secondary)]">
-              AI music discovery, built for brand work
-            </span>
-          </div>
-
           <h1 className="h-display text-[44px] sm:text-[56px] md:text-[64px] text-[var(--color-text-primary)]">
             Music that sounds<br />
             like your brand.
