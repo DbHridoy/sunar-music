@@ -1,8 +1,21 @@
+import { useState } from 'react'
 import { Link } from 'wouter'
-import { ArrowRight, Search, Waves, Layers, Users } from 'lucide-react'
+import {
+  ArrowRight,
+  Search,
+  Waves,
+  Layers,
+  Users,
+  Play,
+  Check,
+  Plus,
+  Minus,
+  Sparkles,
+} from 'lucide-react'
 import Navigation from '@/components/ui/Navigation'
 import Footer from '@/components/ui/Footer'
 import Button from '@/components/ui/Button'
+import { mockTracks } from '@/lib/mockTracks'
 
 const steps = [
   {
@@ -32,7 +45,136 @@ const proof = [
   'Free video sync preview',
 ]
 
+const stats = [
+  { value: '50K+', label: 'Cleared tracks' },
+  { value: '250+', label: 'Agencies & studios' },
+  { value: '< 5 min', label: 'Average brief → shortlist' },
+  { value: '100%', label: 'Stems on every release' },
+]
+
+const testimonials = [
+  {
+    quote:
+      'We used to spend hours scrolling stock libraries for one cue. Now we describe the brief and the right tracks surface in seconds.',
+    name: 'Maya Okafor',
+    role: 'Creative Director, Northwind',
+  },
+  {
+    quote:
+      'Sync preview against our edit before licensing changed our review cycle. Clients pick faster, we close faster.',
+    name: 'Diego Ramos',
+    role: 'Executive Producer, Field Studio',
+  },
+  {
+    quote:
+      'Stems on every track is the unlock. Our post team can shape any cue to fit the brand, not the other way around.',
+    name: 'Hannah Liu',
+    role: 'Head of Brand, Lumen Labs',
+  },
+]
+
+const plans = [
+  {
+    name: 'Starter',
+    price: '$0',
+    cadence: '/ forever',
+    blurb: 'Browse the library and try free video sync.',
+    features: ['Unlimited search', 'Free video sync previews', 'Personal shortlists'],
+    cta: 'Browse the library',
+    href: '/library',
+    featured: false,
+  },
+  {
+    name: 'Studio',
+    price: '$49',
+    cadence: '/ seat / mo',
+    blurb: 'For agencies licensing music every week.',
+    features: [
+      'Everything in Starter',
+      'Unlimited commercial licensing',
+      'Stems on every track',
+      'Shared team shortlists',
+    ],
+    cta: 'See features',
+    href: '/features',
+    featured: true,
+  },
+  {
+    name: 'Enterprise',
+    price: 'Custom',
+    cadence: '',
+    blurb: 'For brand teams and broadcast.',
+    features: [
+      'Everything in Studio',
+      'Custom commissions',
+      'Sonic branding workshops',
+      'Dedicated account team',
+    ],
+    cta: 'Contact sales',
+    href: '/features',
+    featured: false,
+  },
+]
+
+const faqs = [
+  {
+    q: 'How does the AI search actually work?',
+    a: 'Describe the brief in plain language — mood, energy, references, even rough tempo. The model maps your description to tracks tagged across hundreds of dimensions and surfaces the closest fits. You can refine in conversation, just like working with a supervisor.',
+  },
+  {
+    q: 'Are tracks cleared for commercial use?',
+    a: 'Yes. Every track in the library is professionally produced and cleared for commercial use under a single, transparent license. No hidden royalties, no surprise sync fees.',
+  },
+  {
+    q: 'Do I really get stems on every track?',
+    a: 'Yes — drums, bass, melody, and vocals as separated WAV files on every release. Mix to fit the brand and the media spec without going back to the composer.',
+  },
+  {
+    q: 'How does the free video sync preview work?',
+    a: 'Drop an edit into the preview tool, pick a few candidate tracks, and hear them synced against your footage in the browser. Nothing leaves your machine. Share the result with stakeholders before you license.',
+  },
+  {
+    q: 'Can you produce something custom?',
+    a: 'Yes. Our composers take on custom commissions — original cues, sonic branding systems, audio logos — typically delivered in 2–3 weeks.',
+  },
+]
+
+function Faq() {
+  const [open, setOpen] = useState<number | null>(0)
+  return (
+    <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] divide-y divide-[var(--color-border-subtle)] overflow-hidden">
+      {faqs.map((f, i) => {
+        const active = open === i
+        return (
+          <div key={f.q}>
+            <button
+              type="button"
+              onClick={() => setOpen(active ? null : i)}
+              aria-expanded={active}
+              className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-white/[0.02] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)]"
+            >
+              <span className="text-[14px] text-[var(--color-text-primary)]">{f.q}</span>
+              {active ? (
+                <Minus className="w-4 h-4 text-[var(--color-text-tertiary)] flex-shrink-0" />
+              ) : (
+                <Plus className="w-4 h-4 text-[var(--color-text-tertiary)] flex-shrink-0" />
+              )}
+            </button>
+            {active && (
+              <div className="px-5 pb-5 text-[13.5px] text-[var(--color-text-secondary)] leading-relaxed">
+                {f.a}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 export default function Home() {
+  const featured = mockTracks.slice(0, 4)
+
   return (
     <main className="min-h-screen bg-[var(--color-background)] text-[var(--color-text-primary)]">
       <Navigation />
@@ -59,7 +201,6 @@ export default function Home() {
             Describe a mood. Get tracks that fit. License in minutes — with stems, video sync, and clear terms on every release.
           </p>
 
-          {/* Search input */}
           <div className="mt-10 max-w-2xl mx-auto">
             <div className="flex items-center gap-2 p-1.5 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface)] focus-within:border-[var(--color-accent)] transition-colors">
               <div className="pl-3 text-[var(--color-text-tertiary)]">
@@ -105,8 +246,29 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Stats */}
+      <section className="py-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {stats.map((s) => (
+              <div
+                key={s.label}
+                className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-6"
+              >
+                <div className="h-display text-[28px] md:text-[32px] text-[var(--color-text-primary)]">
+                  {s.value}
+                </div>
+                <div className="mt-1 mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
+                  {s.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* How it works */}
-      <section className="py-28">
+      <section className="py-20 border-t border-[var(--color-border-subtle)]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="max-w-2xl mb-14">
             <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
@@ -138,6 +300,70 @@ export default function Home() {
                 <p className="text-[13.5px] text-[var(--color-text-secondary)] leading-relaxed">
                   {s.body}
                 </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured tracks */}
+      <section className="py-20 border-t border-[var(--color-border-subtle)]">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                From the library
+              </span>
+              <h2 className="h-display text-[32px] md:text-[40px] mt-3">
+                Hand-picked this week.
+              </h2>
+            </div>
+            <Link href="/library" className="hidden sm:inline-flex">
+              <Button size="sm" variant="ghost">
+                Browse all
+                <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+              </Button>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {featured.map((t) => (
+              <div
+                key={t.id}
+                className="group rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] overflow-hidden hover:border-[var(--color-border-default)] transition-colors"
+              >
+                <div className="relative aspect-square">
+                  <img
+                    src={t.cover_url}
+                    alt={t.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    aria-label={`Play ${t.title}`}
+                    className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-opacity"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center">
+                      <Play className="w-4 h-4 text-white" />
+                    </div>
+                  </button>
+                </div>
+                <div className="p-4">
+                  <div className="text-[13.5px] text-[var(--color-text-primary)] truncate">
+                    {t.title}
+                  </div>
+                  <div className="text-[12px] text-[var(--color-text-tertiary)] truncate">
+                    {t.artist}
+                  </div>
+                  <div className="mt-3 flex items-center justify-between">
+                    <span className="mono text-[11px] text-[var(--color-text-tertiary)]">
+                      {t.bpm} BPM
+                    </span>
+                    <span className="mono text-[11px] text-[var(--color-text-tertiary)]">
+                      {t.key}
+                    </span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -203,6 +429,177 @@ export default function Home() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 border-t border-[var(--color-border-subtle)]">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="max-w-2xl mb-12">
+            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+              Field reports
+            </span>
+            <h2 className="h-display text-[32px] md:text-[40px] mt-3">
+              Teams shipping with Brandmusic.
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-3">
+            {testimonials.map((t) => (
+              <figure
+                key={t.name}
+                className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-6 flex flex-col"
+              >
+                <blockquote className="text-[14px] text-[var(--color-text-primary)] leading-relaxed">
+                  “{t.quote}”
+                </blockquote>
+                <figcaption className="mt-6 pt-5 border-t border-[var(--color-border-subtle)]">
+                  <div className="text-[13px] text-[var(--color-text-primary)]">{t.name}</div>
+                  <div className="text-[12px] text-[var(--color-text-tertiary)]">{t.role}</div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing preview */}
+      <section className="py-20 border-t border-[var(--color-border-subtle)]">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="max-w-2xl mb-12">
+            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+              Pricing
+            </span>
+            <h2 className="h-display text-[32px] md:text-[40px] mt-3">
+              Straightforward, per seat.
+            </h2>
+            <p className="mt-4 text-[15px] text-[var(--color-text-secondary)] leading-relaxed">
+              Start free. Upgrade when you start licensing. Talk to us when you scale.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-3">
+            {plans.map((p) => (
+              <div
+                key={p.name}
+                className={`rounded-lg border p-6 flex flex-col ${
+                  p.featured
+                    ? 'border-[var(--color-accent)] bg-[var(--color-surface-elevated)]'
+                    : 'border-[var(--color-border-subtle)] bg-[var(--color-surface)]'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-5">
+                  <span className="text-[14px] font-medium text-[var(--color-text-primary)]">
+                    {p.name}
+                  </span>
+                  {p.featured && (
+                    <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                      Popular
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-baseline gap-1.5 mb-3">
+                  <span className="h-display text-[32px] text-[var(--color-text-primary)]">
+                    {p.price}
+                  </span>
+                  {p.cadence && (
+                    <span className="text-[12px] text-[var(--color-text-tertiary)]">
+                      {p.cadence}
+                    </span>
+                  )}
+                </div>
+                <p className="text-[13px] text-[var(--color-text-secondary)] mb-5">{p.blurb}</p>
+                <ul className="space-y-2.5 mb-6 flex-1">
+                  {p.features.map((f) => (
+                    <li
+                      key={f}
+                      className="flex items-start gap-2.5 text-[13px] text-[var(--color-text-secondary)]"
+                    >
+                      <Check className="w-3.5 h-3.5 text-[var(--color-accent)] mt-0.5 flex-shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link href={p.href}>
+                  <Button
+                    size="md"
+                    variant={p.featured ? 'primary' : 'outline'}
+                    fullWidth
+                  >
+                    {p.cta}
+                  </Button>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Custom commissions */}
+      <section className="py-20 border-t border-[var(--color-border-subtle)]">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-8 md:p-12 grid md:grid-cols-[1.2fr_1fr] gap-10 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 mb-5">
+                <Sparkles className="w-3.5 h-3.5 text-[var(--color-accent)]" />
+                <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                  Custom & commissions
+                </span>
+              </div>
+              <h2 className="h-display text-[28px] md:text-[36px]">
+                Original music, sonic branding, and audio logos.
+              </h2>
+              <p className="mt-4 text-[15px] text-[var(--color-text-secondary)] leading-relaxed">
+                When the library is close but not perfect, our composers take it from there. Typical turnaround is 2–3 weeks for an original cue, with a full sonic branding system in 6–8 weeks.
+              </p>
+              <div className="mt-7 flex items-center gap-3">
+                <Link href="/features">
+                  <Button size="md">See what's possible</Button>
+                </Link>
+                <Link href="/features">
+                  <Button size="md" variant="ghost">
+                    Talk to a producer
+                    <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { k: 'Original cue', v: '2–3 wks' },
+                { k: 'Sonic logo', v: '3–4 wks' },
+                { k: 'Brand system', v: '6–8 wks' },
+                { k: 'Campaign suite', v: '4–6 wks' },
+              ].map((c) => (
+                <div
+                  key={c.k}
+                  className="rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-background)] p-4"
+                >
+                  <div className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
+                    {c.k}
+                  </div>
+                  <div className="mt-1.5 h-display text-[22px] text-[var(--color-text-primary)]">
+                    {c.v}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 border-t border-[var(--color-border-subtle)]">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="mb-10">
+            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+              FAQ
+            </span>
+            <h2 className="h-display text-[32px] md:text-[40px] mt-3">
+              Common questions.
+            </h2>
+          </div>
+          <Faq />
         </div>
       </section>
 

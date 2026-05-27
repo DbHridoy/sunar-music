@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import Navigation from '@/components/ui/Navigation'
 import Footer from '@/components/ui/Footer'
-import { Search, Play, Music2, Heart } from 'lucide-react'
+import Button from '@/components/ui/Button'
+import { Search, Play, Music2, Heart, Video, ArrowRight, Sparkles } from 'lucide-react'
+import { Link } from 'wouter'
 import { mockTracks } from '@/lib/mockTracks'
 import FavoriteButton from '@/components/ui/FavoriteButton'
 import AddToPlaylistButton from '@/components/ui/AddToPlaylistButton'
@@ -10,6 +12,38 @@ import { usePlaylists } from '@/hooks/usePlaylists'
 import { useAuth } from '@/contexts/AuthContext'
 
 const moods = ['Energetic', 'Calm', 'Uplifting', 'Dark', 'Emotional', 'Confident', 'Playful', 'Dramatic']
+const genres = ['All', 'Corporate', 'Ambient', 'Electronic', 'Cinematic', 'Pop', 'Hip Hop', 'Acoustic', 'Tech']
+
+const collections = [
+  {
+    title: 'Tech & Startup',
+    tracks: 142,
+    blurb: 'Forward-momentum cues for product launches and brand films.',
+    cover:
+      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop',
+  },
+  {
+    title: 'Cinematic Brands',
+    tracks: 96,
+    blurb: 'Strings, swells, and emotional arcs for hero spots.',
+    cover:
+      'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop',
+  },
+  {
+    title: 'Ambient & Calm',
+    tracks: 78,
+    blurb: 'Atmospheric textures for wellness, fashion, and editorial.',
+    cover:
+      'https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=600&h=400&fit=crop',
+  },
+  {
+    title: 'Confident Pop',
+    tracks: 124,
+    blurb: 'Modern, hooky tracks for retail, lifestyle, and social.',
+    cover:
+      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&h=400&fit=crop',
+  },
+]
 
 export default function LibraryPage() {
   const { user } = useAuth()
@@ -17,6 +51,7 @@ export default function LibraryPage() {
   const { playlists } = usePlaylists()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedMood, setSelectedMood] = useState<string | null>(null)
+  const [selectedGenre, setSelectedGenre] = useState<string>('All')
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
 
   const filteredTracks = mockTracks.filter((track) => {
@@ -25,10 +60,14 @@ export default function LibraryPage() {
       track.artist.toLowerCase().includes(searchQuery.toLowerCase()) ||
       track.genre.some((g) => g.toLowerCase().includes(searchQuery.toLowerCase()))
     const matchesMood = !selectedMood || track.mood.includes(selectedMood)
+    const matchesGenre =
+      selectedGenre === 'All' || track.genre.some((g) => g === selectedGenre)
     const matchesFavorites =
       !showFavoritesOnly || favorites.some((fav) => fav.track_id === track.id)
-    return matchesSearch && matchesMood && matchesFavorites
+    return matchesSearch && matchesMood && matchesGenre && matchesFavorites
   })
+
+  const newReleases = mockTracks.slice(0, Math.min(4, mockTracks.length))
 
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
@@ -73,7 +112,31 @@ export default function LibraryPage() {
             />
           </div>
 
+          {/* Genre row */}
           <div className="mt-5 flex flex-wrap items-center gap-2">
+            {genres.map((g) => {
+              const active = selectedGenre === g
+              return (
+                <button
+                  key={g}
+                  onClick={() => setSelectedGenre(g)}
+                  className={`h-8 px-3 rounded-md text-[12.5px] border transition-colors ${
+                    active
+                      ? 'bg-[var(--color-accent)] border-[var(--color-accent)] text-white'
+                      : 'bg-[var(--color-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)]'
+                  }`}
+                >
+                  {g}
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Mood row */}
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] mr-1">
+              Mood
+            </span>
             {moods.map((mood) => {
               const active = selectedMood === mood
               return (
@@ -119,6 +182,140 @@ export default function LibraryPage() {
               </div>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Video sync banner */}
+      <section className="pb-12">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-5 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-md border border-[var(--color-border-default)] bg-[var(--color-background)] flex items-center justify-center flex-shrink-0">
+                <Video className="w-4 h-4 text-[var(--color-accent)]" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[14px] font-medium text-[var(--color-text-primary)]">
+                    Video Sync Tool
+                  </span>
+                  <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                    Free
+                  </span>
+                </div>
+                <p className="text-[13px] text-[var(--color-text-secondary)]">
+                  Preview any track against your footage — before you license.
+                </p>
+              </div>
+            </div>
+            <Link href="/features">
+              <Button size="sm" variant="outline">
+                Try it
+                <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured collections */}
+      <section className="pb-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-end justify-between mb-6">
+            <div>
+              <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                Collections
+              </span>
+              <h2 className="h-display text-[22px] md:text-[28px] mt-2">Curated for brand work.</h2>
+            </div>
+            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] hidden sm:block">
+              {collections.length} sets
+            </span>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {collections.map((c) => (
+              <button
+                key={c.title}
+                type="button"
+                className="group text-left rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] overflow-hidden hover:border-[var(--color-border-default)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)]"
+              >
+                <div className="relative aspect-[5/3] overflow-hidden">
+                  <img
+                    src={c.cover}
+                    alt=""
+                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-background)] via-transparent to-transparent" />
+                  <span className="absolute top-2.5 left-2.5 mono text-[10px] uppercase tracking-[0.18em] text-white/90 bg-black/40 backdrop-blur px-1.5 py-0.5 rounded">
+                    {c.tracks} tracks
+                  </span>
+                </div>
+                <div className="p-4">
+                  <div className="text-[14px] font-medium text-[var(--color-text-primary)]">
+                    {c.title}
+                  </div>
+                  <p className="mt-1 text-[12.5px] text-[var(--color-text-tertiary)] leading-relaxed">
+                    {c.blurb}
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* New releases */}
+      <section className="pb-12">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-end justify-between mb-6">
+            <div>
+              <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                <Sparkles className="inline w-3 h-3 mr-1 -mt-0.5" />
+                New this week
+              </span>
+              <h2 className="h-display text-[22px] md:text-[28px] mt-2">Fresh on the library.</h2>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {newReleases.map((t) => (
+              <div
+                key={t.id}
+                className="group rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] overflow-hidden hover:border-[var(--color-border-default)] transition-colors"
+              >
+                <div className="relative aspect-square">
+                  <img
+                    src={t.cover_url}
+                    alt={t.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    aria-label={`Play ${t.title}`}
+                    className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-opacity"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center">
+                      <Play className="w-4 h-4 text-white" />
+                    </div>
+                  </button>
+                </div>
+                <div className="p-4">
+                  <div className="text-[13.5px] text-[var(--color-text-primary)] truncate">
+                    {t.title}
+                  </div>
+                  <div className="text-[12px] text-[var(--color-text-tertiary)] truncate">
+                    {t.artist}
+                  </div>
+                  <div className="mt-3 flex items-center justify-between">
+                    <span className="mono text-[11px] text-[var(--color-text-tertiary)]">
+                      {t.bpm} BPM
+                    </span>
+                    <span className="mono text-[11px] text-[var(--color-text-tertiary)]">
+                      {t.key}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
