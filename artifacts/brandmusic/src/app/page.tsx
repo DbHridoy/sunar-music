@@ -10,7 +10,6 @@ import {
   Check,
   Plus,
   Minus,
-  Sparkles,
 } from 'lucide-react'
 import Navigation from '@/components/ui/Navigation'
 import Footer from '@/components/ui/Footer'
@@ -521,60 +520,6 @@ export default function Home() {
                 </Link>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Custom commissions */}
-      <section className="py-20 border-t border-[var(--color-border-subtle)]">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-8 md:p-12 grid md:grid-cols-[1.2fr_1fr] gap-10 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 mb-5">
-                <Sparkles className="w-3.5 h-3.5 text-[var(--color-accent)]" />
-                <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
-                  Custom & commissions
-                </span>
-              </div>
-              <h2 className="h-display text-[28px] md:text-[36px]">
-                Original music, sonic branding, and audio logos.
-              </h2>
-              <p className="mt-4 text-[15px] text-[var(--color-text-secondary)] leading-relaxed">
-                When the library is close but not perfect, our composers take it from there. Typical turnaround is 2–3 weeks for an original cue, with a full sonic branding system in 6–8 weeks.
-              </p>
-              <div className="mt-7 flex items-center gap-3">
-                <Link href="/features">
-                  <Button size="md">See what's possible</Button>
-                </Link>
-                <Link href="/features">
-                  <Button size="md" variant="ghost">
-                    Talk to a producer
-                    <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { k: 'Original cue', v: '2–3 wks' },
-                { k: 'Sonic logo', v: '3–4 wks' },
-                { k: 'Brand system', v: '6–8 wks' },
-                { k: 'Campaign suite', v: '4–6 wks' },
-              ].map((c) => (
-                <div
-                  key={c.k}
-                  className="rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-background)] p-4"
-                >
-                  <div className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
-                    {c.k}
-                  </div>
-                  <div className="mt-1.5 h-display text-[22px] text-[var(--color-text-primary)]">
-                    {c.v}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
