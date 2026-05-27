@@ -1,6 +1,4 @@
-import { Link } from 'wouter'
 import {
-  ArrowRight,
   Search,
   Video,
   Sliders,
@@ -16,7 +14,6 @@ import {
 } from 'lucide-react'
 import Navigation from '@/components/ui/Navigation'
 import Footer from '@/components/ui/Footer'
-import Button from '@/components/ui/Button'
 
 const detailedFeatures = [
   {
@@ -328,29 +325,6 @@ export default function FeaturesPage() {
               {testimonial.role}
             </figcaption>
           </figure>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-24 border-t border-[var(--color-border-subtle)]">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="h-display text-[32px] md:text-[40px]">
-            Try it on a real brief.
-          </h2>
-          <p className="mt-4 text-[15px] text-[var(--color-text-secondary)]">
-            Browse the library and search the way you'd describe the work.
-          </p>
-          <div className="mt-7 flex items-center justify-center gap-3">
-            <Link href="/library">
-              <Button size="md">
-                Browse the library
-                <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
-              </Button>
-            </Link>
-            <Link href="/">
-              <Button size="md" variant="outline">Back to home</Button>
-            </Link>
-          </div>
         </div>
       </section>
 
