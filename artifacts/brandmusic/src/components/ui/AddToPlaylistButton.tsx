@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { ListPlus, Plus, Check } from 'lucide-react'
 import { usePlaylists } from '@/hooks/usePlaylists'
@@ -19,20 +18,20 @@ export default function AddToPlaylistButton({ trackId, size = 'md', className = 
   const [addedToPlaylists, setAddedToPlaylists] = useState<Set<string>>(new Set())
 
   const sizes = {
-    sm: 'w-4 h-4',
-    md: 'w-5 h-5',
-    lg: 'w-6 h-6',
+    sm: 'w-3.5 h-3.5',
+    md: 'w-4 h-4',
+    lg: 'w-5 h-5',
   }
+
+  const triggerClass = `inline-flex items-center justify-center w-8 h-8 rounded-md border border-[var(--color-border-subtle)] text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-border-default)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${className}`
 
   const handleAddToPlaylist = async (playlistId: string) => {
     if (!user) return
-
     const { error } = await addTrackToPlaylist(playlistId, trackId)
-    
     if (!error) {
-      setAddedToPlaylists(prev => new Set(prev).add(playlistId))
+      setAddedToPlaylists((prev) => new Set(prev).add(playlistId))
       setTimeout(() => {
-        setAddedToPlaylists(prev => {
+        setAddedToPlaylists((prev) => {
           const next = new Set(prev)
           next.delete(playlistId)
           return next
@@ -44,16 +43,14 @@ export default function AddToPlaylistButton({ trackId, size = 'md', className = 
   const handleCreatePlaylist = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newPlaylistName.trim() || !user) return
-
     setCreatingPlaylist(true)
     const { data, error } = await createPlaylist(newPlaylistName)
-    
     if (!error && data) {
       await addTrackToPlaylist(data.id, trackId)
       setNewPlaylistName('')
-      setAddedToPlaylists(prev => new Set(prev).add(data.id))
+      setAddedToPlaylists((prev) => new Set(prev).add(data.id))
       setTimeout(() => {
-        setAddedToPlaylists(prev => {
+        setAddedToPlaylists((prev) => {
           const next = new Set(prev)
           next.delete(data.id)
           return next
@@ -66,11 +63,13 @@ export default function AddToPlaylistButton({ trackId, size = 'md', className = 
   if (!user) {
     return (
       <button
-        onClick={() => window.location.href = '/login'}
-        className={`group relative transition-all ${className}`}
+        type="button"
+        disabled
+        title="Sign in to save to a playlist"
         aria-label="Add to playlist"
+        className={triggerClass}
       >
-        <ListPlus className={`${sizes[size]} text-white/40 group-hover:text-electric-blue group-hover:scale-110 transition-all`} />
+        <ListPlus className={sizes[size]} />
       </button>
     )
   }
@@ -78,58 +77,58 @@ export default function AddToPlaylistButton({ trackId, size = 'md', className = 
   return (
     <div className="relative">
       <button
+        type="button"
         onClick={() => setShowMenu(!showMenu)}
-        className={`group relative transition-all ${className}`}
         aria-label="Add to playlist"
+        aria-expanded={showMenu}
+        className={triggerClass}
       >
-        <ListPlus className={`${sizes[size]} text-white/40 group-hover:text-electric-blue group-hover:scale-110 transition-all`} />
+        <ListPlus className={sizes[size]} />
       </button>
 
       {showMenu && (
         <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setShowMenu(false)}
-          />
-          <div className="absolute right-0 top-full mt-2 w-64 bg-[#1A1A1A] border border-white/10 rounded-lg shadow-xl z-50 overflow-hidden">
-            {/* Create new playlist */}
-            <form onSubmit={handleCreatePlaylist} className="p-3 border-b border-white/10">
+          <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+          <div className="absolute right-0 top-full mt-2 w-64 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface-elevated)] shadow-xl z-50 overflow-hidden">
+            <form onSubmit={handleCreatePlaylist} className="p-2.5 border-b border-[var(--color-border-subtle)]">
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={newPlaylistName}
                   onChange={(e) => setNewPlaylistName(e.target.value)}
-                  placeholder="New playlist name"
-                  className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-white placeholder-white/40 focus:outline-none focus:border-electric-blue/50"
+                  placeholder="New playlist"
+                  aria-label="New playlist name"
+                  className="flex-1 h-8 px-2.5 rounded-md border border-[var(--color-border-default)] bg-[var(--color-background)] text-[13px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] focus:outline-none focus:border-[var(--color-accent)]"
                 />
                 <button
                   type="submit"
                   disabled={!newPlaylistName.trim() || creatingPlaylist}
-                  className="px-3 py-2 bg-electric-blue/20 hover:bg-electric-blue/30 border border-electric-blue/30 rounded text-electric-blue disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Create playlist"
+                  className="inline-flex items-center justify-center w-8 h-8 rounded-md bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
             </form>
 
-            {/* Existing playlists */}
             <div className="max-h-64 overflow-y-auto">
               {playlists.length === 0 ? (
-                <div className="p-4 text-center text-white/40 text-sm">
-                  No playlists yet. Create one above!
+                <div className="p-4 text-center text-[12.5px] text-[var(--color-text-tertiary)]">
+                  No playlists yet. Create one above.
                 </div>
               ) : (
                 playlists.map((playlist) => (
                   <button
+                    type="button"
                     key={playlist.id}
                     onClick={() => handleAddToPlaylist(playlist.id)}
-                    className="w-full px-4 py-3 text-left hover:bg-white/5 transition-colors flex items-center justify-between group"
+                    className="w-full px-3 py-2.5 text-left hover:bg-white/[0.03] transition-colors flex items-center justify-between"
                   >
-                    <span className="text-sm text-white/80 group-hover:text-white transition-colors">
+                    <span className="text-[13px] text-[var(--color-text-secondary)]">
                       {playlist.name}
                     </span>
                     {addedToPlaylists.has(playlist.id) && (
-                      <Check className="w-4 h-4 text-green-500" />
+                      <Check className="w-3.5 h-3.5 text-[var(--color-accent)]" />
                     )}
                   </button>
                 ))

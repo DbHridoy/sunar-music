@@ -1,8 +1,7 @@
-
 import { useState } from 'react'
 import Navigation from '@/components/ui/Navigation'
 import Footer from '@/components/ui/Footer'
-import { Search, Play, Clock, Music2, Filter, Heart } from 'lucide-react'
+import { Search, Play, Music2, Heart } from 'lucide-react'
 import { mockTracks } from '@/lib/mockTracks'
 import FavoriteButton from '@/components/ui/FavoriteButton'
 import AddToPlaylistButton from '@/components/ui/AddToPlaylistButton'
@@ -20,15 +19,14 @@ export default function LibraryPage() {
   const [selectedMood, setSelectedMood] = useState<string | null>(null)
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
 
-  const filteredTracks = mockTracks.filter(track => {
-    const matchesSearch = track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         track.artist.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         track.genre.some(g => g.toLowerCase().includes(searchQuery.toLowerCase()))
-    
+  const filteredTracks = mockTracks.filter((track) => {
+    const matchesSearch =
+      track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      track.artist.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      track.genre.some((g) => g.toLowerCase().includes(searchQuery.toLowerCase()))
     const matchesMood = !selectedMood || track.mood.includes(selectedMood)
-    
-    const matchesFavorites = !showFavoritesOnly || favorites.some(fav => fav.track_id === track.id)
-    
+    const matchesFavorites =
+      !showFavoritesOnly || favorites.some((fav) => fav.track_id === track.id)
     return matchesSearch && matchesMood && matchesFavorites
   })
 
@@ -39,174 +37,173 @@ export default function LibraryPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A]">
+    <main className="min-h-screen bg-[var(--color-background)] text-[var(--color-text-primary)]">
       <Navigation />
-      
+
+      {/* Header */}
       <section className="relative pt-32 pb-12 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-electric-blue/10 via-transparent to-transparent" />
-        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-electric-purple/10 rounded-full blur-[120px]" />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="font-display font-bold text-[48px] md:text-[64px] mb-6 text-white leading-[1.1]">
-              Browse Music
-            </h1>
-            <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Talk to our AI like you would talk to a music supervisor
-            </p>
-          </div>
+        <div className="absolute inset-0 bg-grid bg-grid-fade pointer-events-none" />
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+          <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+            Library
+          </span>
+          <h1 className="h-display text-[44px] sm:text-[56px] md:text-[60px] mt-4">
+            Browse music.
+          </h1>
+          <p className="mt-4 text-[15px] text-[var(--color-text-secondary)] max-w-xl mx-auto">
+            Describe what you need — mood, energy, references — the way you'd brief a music supervisor.
+          </p>
+        </div>
+      </section>
 
-          <div className="max-w-4xl mx-auto mb-8">
-            <div className="relative">
-              <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-electric-blue" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Try: 'Confident but not aggressive for a tech startup...'"
-                className="w-full pl-16 pr-32 py-5 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl border border-white/20 text-white placeholder-white/40 text-lg focus:outline-none focus:border-electric-blue/50 transition-all"
-              />
-              <button className="absolute right-3 top-1/2 -translate-y-1/2 px-6 py-2.5 bg-gradient-to-r from-electric-blue to-electric-purple rounded-xl text-white font-medium hover:shadow-lg hover:shadow-electric-blue/30 transition-all">
-                Search
-              </button>
+      {/* Search + filters */}
+      <section className="pb-8">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="flex items-center gap-2 p-1.5 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface)] focus-within:border-[var(--color-accent)] transition-colors">
+            <div className="pl-3 text-[var(--color-text-tertiary)]">
+              <Search className="w-4 h-4" />
             </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search tracks by title, artist, or genre"
+              placeholder="Confident but not aggressive, for a tech startup…"
+              className="flex-1 bg-transparent text-[14px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] outline-none py-2"
+            />
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            {moods.map((mood) => (
-              <button
-                key={mood}
-                onClick={() => setSelectedMood(selectedMood === mood ? null : mood)}
-                className={`px-6 py-2.5 rounded-full border transition-all ${
-                  selectedMood === mood
-                    ? 'bg-electric-blue/20 border-electric-blue/50 text-electric-blue'
-                    : 'bg-white/5 border-white/10 text-white/60 hover:border-white/30 hover:text-white/80'
-                }`}
-              >
-                {mood}
-              </button>
-            ))}
+          <div className="mt-5 flex flex-wrap items-center gap-2">
+            {moods.map((mood) => {
+              const active = selectedMood === mood
+              return (
+                <button
+                  key={mood}
+                  onClick={() => setSelectedMood(active ? null : mood)}
+                  className={`h-8 px-3 rounded-md text-[12.5px] border transition-colors ${
+                    active
+                      ? 'bg-[var(--color-accent-soft)] border-[var(--color-accent)] text-[var(--color-accent)]'
+                      : 'bg-[var(--color-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)]'
+                  }`}
+                >
+                  {mood}
+                </button>
+              )
+            })}
           </div>
 
           {user && (
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
+            <div className="mt-4 flex flex-wrap items-center gap-3">
               <button
                 onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-full border transition-all ${
+                className={`inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-[12.5px] border transition-colors ${
                   showFavoritesOnly
-                    ? 'bg-red-500/20 border-red-500/50 text-red-400'
-                    : 'bg-white/5 border-white/10 text-white/60 hover:border-white/30 hover:text-white/80'
+                    ? 'bg-[var(--color-accent-soft)] border-[var(--color-accent)] text-[var(--color-accent)]'
+                    : 'bg-[var(--color-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)]'
                 }`}
               >
-                <Heart className={`w-4 h-4 ${showFavoritesOnly ? 'fill-red-400' : ''}`} />
-                My Favorites ({favorites.length})
+                <Heart
+                  className={`w-3.5 h-3.5 ${showFavoritesOnly ? 'fill-[var(--color-accent)]' : ''}`}
+                />
+                Favorites
+                <span className="mono text-[11px] text-[var(--color-text-tertiary)]">
+                  {favorites.length}
+                </span>
               </button>
-
-              <div className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 text-white/60">
-                <Music2 className="w-4 h-4" />
-                {playlists.length} Playlists
+              <div className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[12.5px] text-[var(--color-text-secondary)]">
+                <Music2 className="w-3.5 h-3.5" />
+                Playlists
+                <span className="mono text-[11px] text-[var(--color-text-tertiary)]">
+                  {playlists.length}
+                </span>
               </div>
             </div>
           )}
         </div>
       </section>
 
-      <section className="relative py-6">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="relative group cursor-pointer">
-            <div className="absolute -inset-1 bg-gradient-to-r from-electric-blue via-electric-purple to-electric-cyan rounded-2xl blur opacity-20 group-hover:opacity-30 transition-opacity" />
-            <div className="relative p-6 bg-gradient-to-r from-electric-blue/10 to-electric-purple/10 backdrop-blur-xl rounded-2xl border border-white/20 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-electric-blue to-electric-purple rounded-xl flex items-center justify-center">
-                  <Play className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-white mb-1">Video Sync Tool</h3>
-                  <p className="text-sm text-white/60">Preview tracks against your footage</p>
-                </div>
-              </div>
-              <button className="px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white transition-all">
-                Try It Free
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="relative py-12">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="font-display font-bold text-2xl text-white">
-              {showFavoritesOnly ? 'Your Favorites' : 'All Tracks'}
-              <span className="ml-3 text-white/40 font-normal text-lg">
-                {filteredTracks.length} {filteredTracks.length === 1 ? 'track' : 'tracks'}
-              </span>
+      {/* Results */}
+      <section className="pb-24">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-baseline justify-between mb-4">
+            <h2 className="text-[14px] font-medium text-[var(--color-text-primary)]">
+              {showFavoritesOnly ? 'Your favorites' : 'All tracks'}
             </h2>
-            <button className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white/60 hover:text-white/80 hover:border-white/20 transition-all">
-              <Filter className="w-4 h-4" />
-              Filter
-            </button>
+            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
+              {filteredTracks.length} {filteredTracks.length === 1 ? 'track' : 'tracks'}
+            </span>
           </div>
 
           {filteredTracks.length === 0 ? (
-            <div className="text-center py-20">
-              <Music2 className="w-16 h-16 text-white/20 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white/60 mb-2">
+            <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] py-16 text-center">
+              <Music2 className="w-6 h-6 text-[var(--color-text-tertiary)] mx-auto mb-3" />
+              <h3 className="text-[14px] font-medium text-[var(--color-text-primary)] mb-1">
                 {showFavoritesOnly ? 'No favorites yet' : 'No tracks found'}
               </h3>
-              <p className="text-white/40">
-                {showFavoritesOnly 
-                  ? 'Start adding tracks to your favorites!' 
-                  : 'Try adjusting your search or filters'}
+              <p className="text-[13px] text-[var(--color-text-secondary)]">
+                {showFavoritesOnly
+                  ? 'Start adding tracks to your favorites.'
+                  : 'Try adjusting your search or filters.'}
               </p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] divide-y divide-[var(--color-border-subtle)] overflow-hidden">
               {filteredTracks.map((track) => (
-                <div key={track.id} className="group relative">
-                  <div className="absolute -inset-[1px] bg-gradient-to-r from-electric-blue/20 to-electric-purple/20 rounded-xl opacity-0 group-hover:opacity-100 blur transition-opacity" />
-                  <div className="relative p-4 bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 group-hover:border-white/20 transition-all flex items-center gap-4">
-                    <div className="relative flex-shrink-0">
-                      <img
-                        src={track.cover_url}
-                        alt={track.title}
-                        className="w-16 h-16 rounded-lg object-cover"
-                      />
-                      <button className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
-                        <Play className="w-6 h-6 text-white-white" />
-                      </button>
-                    </div>
+                <div
+                  key={track.id}
+                  className="group flex items-center gap-4 px-4 py-3 hover:bg-white/[0.02] transition-colors"
+                >
+                  <div className="relative flex-shrink-0">
+                    <img
+                      src={track.cover_url}
+                      alt={track.title}
+                      className="w-11 h-11 rounded-md object-cover border border-[var(--color-border-subtle)]"
+                    />
+                    <button
+                      type="button"
+                      aria-label={`Play ${track.title}`}
+                      className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-opacity rounded-md"
+                    >
+                      <Play className="w-4 h-4 text-white" />
+                    </button>
+                  </div>
 
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-white mb-1 truncate">{track.title}</h3>
-                      <p className="text-sm text-white/60 truncate">{track.artist}</p>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[13.5px] text-[var(--color-text-primary)] truncate">
+                      {track.title}
                     </div>
+                    <div className="text-[12px] text-[var(--color-text-tertiary)] truncate">
+                      {track.artist}
+                    </div>
+                  </div>
 
-                    <div className="hidden md:flex items-center gap-2 flex-shrink-0">
-                      {track.genre.slice(0, 2).map((genre) => (
-                        <span
-                          key={genre}
-                          className="px-3 py-1 bg-white/10 rounded-full text-xs text-white/70"
-                        >
-                          {genre}
-                        </span>
-                      ))}
-                    </div>
+                  <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
+                    {track.genre.slice(0, 2).map((g) => (
+                      <span
+                        key={g}
+                        className="px-2 py-0.5 rounded border border-[var(--color-border-subtle)] text-[11px] text-[var(--color-text-secondary)]"
+                      >
+                        {g}
+                      </span>
+                    ))}
+                  </div>
 
-                    <div className="hidden lg:flex items-center gap-4 text-sm text-white/60 flex-shrink-0">
-                      <span>{track.bpm} BPM</span>
-                      <span>{track.key}</span>
-                    </div>
+                  <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
+                    <span className="mono text-[11px] text-[var(--color-text-tertiary)]">
+                      {track.bpm} BPM
+                    </span>
+                    <span className="mono text-[11px] text-[var(--color-text-tertiary)]">
+                      {track.key}
+                    </span>
+                  </div>
 
-                    <div className="flex items-center gap-2 text-white/60 flex-shrink-0">
-                      <Clock className="w-4 h-4" />
-                      <span className="text-sm">{formatDuration(track.duration)}</span>
-                    </div>
+                  <span className="mono text-[11px] text-[var(--color-text-tertiary)] flex-shrink-0">
+                    {formatDuration(track.duration)}
+                  </span>
 
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <FavoriteButton trackId={track.id} />
-                      <AddToPlaylistButton trackId={track.id} />
-                    </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <FavoriteButton trackId={track.id} />
+                    <AddToPlaylistButton trackId={track.id} />
                   </div>
                 </div>
               ))}

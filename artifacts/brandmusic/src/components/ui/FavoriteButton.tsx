@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { Heart } from 'lucide-react'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -14,42 +13,36 @@ export default function FavoriteButton({ trackId, size = 'md', className = '' }:
   const { user } = useAuth()
   const { isFavorite, toggleFavorite } = useFavorites()
   const [loading, setLoading] = useState(false)
-  const favorite = isFavorite(trackId)
+  const favorite = !!user && isFavorite(trackId)
 
   const sizes = {
-    sm: 'w-4 h-4',
-    md: 'w-5 h-5',
-    lg: 'w-6 h-6',
+    sm: 'w-3.5 h-3.5',
+    md: 'w-4 h-4',
+    lg: 'w-5 h-5',
   }
 
   const handleToggle = async (e: React.MouseEvent) => {
     e.stopPropagation()
-    
-    if (!user) {
-      // Redirect to login
-      window.location.href = '/login'
-      return
-    }
-
+    if (!user) return
     setLoading(true)
     await toggleFavorite(trackId)
     setLoading(false)
   }
 
+  const disabled = !user || loading
+
   return (
     <button
+      type="button"
       onClick={handleToggle}
-      disabled={loading}
-      className={`group relative transition-all ${className}`}
+      disabled={disabled}
+      title={!user ? 'Sign in to favorite tracks' : favorite ? 'Remove from favorites' : 'Add to favorites'}
       aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
+      className={`inline-flex items-center justify-center w-8 h-8 rounded-md border border-[var(--color-border-subtle)] text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-border-default)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
+        favorite ? 'text-[var(--color-accent)] border-[var(--color-accent)]' : ''
+      } ${className}`}
     >
-      <Heart
-        className={`${sizes[size]} transition-all ${
-          favorite
-            ? 'fill-red-500 text-red-500'
-            : 'text-white/40 group-hover:text-red-500 group-hover:scale-110'
-        } ${loading ? 'opacity-50' : ''}`}
-      />
+      <Heart className={`${sizes[size]} ${favorite ? 'fill-[var(--color-accent)]' : ''}`} />
     </button>
   )
 }

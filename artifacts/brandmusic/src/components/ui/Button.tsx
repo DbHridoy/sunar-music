@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, ReactNode } from 'react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
-  variant?: 'primary' | 'secondary' | 'outline'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
   size?: 'sm' | 'md' | 'lg'
   fullWidth?: boolean
 }
@@ -15,24 +15,30 @@ export default function Button({
   className = '',
   ...props
 }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-electric-blue/50'
-  
+  const base =
+    'inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] disabled:opacity-50 disabled:cursor-not-allowed'
+
   const variants = {
-    primary: 'bg-electric-blue text-white hover:bg-electric-cyan shadow-md hover:shadow-glow-sm',
-    secondary: 'bg-surface-elevated text-white hover:bg-surface-hover border border-white/10',
-    outline: 'border-2 border-white/20 text-white hover:border-electric-blue hover:text-electric-blue hover:bg-electric-blue/5',
+    primary: 'bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)]',
+    secondary:
+      'bg-[var(--color-surface-elevated)] text-[var(--color-text-primary)] border border-[var(--color-border-default)] hover:border-[var(--color-border-strong)]',
+    outline:
+      'bg-transparent text-[var(--color-text-primary)] border border-[var(--color-border-default)] hover:border-[var(--color-border-strong)] hover:bg-white/[0.02]',
+    ghost:
+      'bg-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-white/[0.04]',
   }
-  
+
   const sizes = {
-    sm: 'px-4 py-2 text-sm',
-    md: 'px-6 py-3 text-base',
-    lg: 'px-8 py-4 text-base',
+    sm: 'h-8 px-3 text-[13px]',
+    md: 'h-10 px-4 text-sm',
+    lg: 'h-11 px-5 text-sm',
   }
-  
-  const widthClass = fullWidth ? 'w-full' : ''
-  
+
   return (
-    <button className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${widthClass} ${className}`} {...props}>
+    <button
+      className={`${base} ${variants[variant]} ${sizes[size]} ${fullWidth ? 'w-full' : ''} ${className}`}
+      {...props}
+    >
       {children}
     </button>
   )

@@ -2,123 +2,41 @@ import { Link } from 'wouter'
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0A0A0A] border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          {/* Logo & Description */}
-          <div className="md:col-span-1">
-            <Link href="/" className="inline-block mb-4">
-              <img
-                src="/BrandMusic_H.svg"
-                alt="Brandmusic"
-                width={180}
-                height={45}
-                className="h-10 w-auto brightness-0 invert"
-              />
+    <footer className="border-t border-[var(--color-border-subtle)] bg-[var(--color-background)]">
+      <div className="max-w-6xl mx-auto px-6 py-10">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="flex items-center gap-2">
+            <span className="font-display text-[15px] font-semibold tracking-tight text-[var(--color-text-primary)]">
+              brandmusic
+            </span>
+            <span className="text-[13px] text-[var(--color-text-tertiary)]">
+              AI-powered music licensing.
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <Link
+              href="/library"
+              className="text-[13px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+            >
+              Browse Music
             </Link>
-            <p className="text-sm text-white/60 leading-relaxed">
-              AI-powered music licensing for agencies and brands.
-            </p>
-          </div>
-
-          {/* Product */}
-          <div>
-            <h3 className="font-semibold text-white mb-4">Product</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/library" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Browse Music
-                </Link>
-              </li>
-              <li>
-                <Link href="/features" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Features
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link href="/enterprise" className="text-sm text-white/60 hover:text-white transition-colors">
-                  For Enterprise
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h3 className="font-semibold text-white mb-4">Services</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/services" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Custom Music
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Sonic Branding
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Audio Logos
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Brand Strategy
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h3 className="font-semibold text-white mb-4">Company</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/about" className="text-sm text-white/60 hover:text-white transition-colors">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="/careers" className="text-sm text-white/60 hover:text-white transition-colors">
-                  Careers
-                </Link>
-              </li>
-            </ul>
+            <Link
+              href="/features"
+              className="text-[13px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+            >
+              Features
+            </Link>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-white/40">
-            © 2026 Brandmusic. All rights reserved.
+        <div className="mt-8 pt-6 border-t border-[var(--color-border-subtle)] flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <p className="text-[12px] text-[var(--color-text-tertiary)]">
+            © 2026 Brandmusic
           </p>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="text-sm text-white/40 hover:text-white/60 transition-colors">
-              Privacy
-            </Link>
-            <Link href="/terms" className="text-sm text-white/40 hover:text-white/60 transition-colors">
-              Terms
-            </Link>
-            <Link href="/cookies" className="text-sm text-white/40 hover:text-white/60 transition-colors">
-              Cookies
-            </Link>
-          </div>
+          <p className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
+            v0.1 — Beta
+          </p>
         </div>
       </div>
     </footer>
