@@ -20,6 +20,12 @@ export default function Navigation() {
 
           <div className="hidden md:flex items-center gap-7">
             <Link
+              href="/"
+              className="text-[13px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+            >
+              Home
+            </Link>
+            <Link
               href="/library"
               className="text-[13px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
             >
@@ -49,6 +55,13 @@ export default function Navigation() {
       {isOpen && (
         <div className="md:hidden border-t border-[var(--color-border-subtle)] bg-[var(--color-background)]">
           <div className="px-6 py-4 space-y-1">
+            <Link
+              href="/"
+              className="block py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Home
+            </Link>
             <Link
               href="/library"
               className="block py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
