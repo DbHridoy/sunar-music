@@ -302,6 +302,56 @@ export default function LibraryPage() {
   const [syncStage, setSyncStage] = useState<'idle' | 'analyzing' | 'ready'>('idle')
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
+  type LicenseForm = {
+    useType: string
+    media: string[]
+    term: string
+    territory: string
+    territoryOther: string
+    exclusivity: '' | 'non-exclusive' | 'exclusive'
+    exclusivityCategory: string
+    brand: string
+  }
+  const emptyLicenseForm: LicenseForm = {
+    useType: '',
+    media: [],
+    term: '',
+    territory: '',
+    territoryOther: '',
+    exclusivity: '',
+    exclusivityCategory: '',
+    brand: '',
+  }
+  const [licenseTrack, setLicenseTrack] = useState<Track | null>(null)
+  const [licenseForm, setLicenseForm] = useState<LicenseForm>(emptyLicenseForm)
+  const [licenseSubmitted, setLicenseSubmitted] = useState(false)
+
+  const openLicense = (track: Track) => {
+    setLicenseTrack(track)
+    setLicenseForm(emptyLicenseForm)
+    setLicenseSubmitted(false)
+  }
+  const closeLicense = () => {
+    setLicenseTrack(null)
+    setLicenseSubmitted(false)
+  }
+  const toggleMedia = (m: string) => {
+    setLicenseForm((f) => ({
+      ...f,
+      media: f.media.includes(m) ? f.media.filter((x) => x !== m) : [...f.media, m],
+    }))
+  }
+  const licenseValid =
+    licenseForm.useType !== '' &&
+    licenseForm.media.length > 0 &&
+    licenseForm.term !== '' &&
+    licenseForm.territory !== '' &&
+    (licenseForm.territory !== 'Other' || licenseForm.territoryOther.trim() !== '') &&
+    licenseForm.exclusivity !== '' &&
+    (licenseForm.exclusivity !== 'exclusive' ||
+      licenseForm.exclusivityCategory.trim() !== '') &&
+    licenseForm.brand.trim() !== ''
+
   const openSync = () => {
     setSyncFile(null)
     setSyncStage('idle')
@@ -573,6 +623,7 @@ export default function LibraryPage() {
                       </button>
                       <button
                         type="button"
+                        onClick={() => openLicense(track)}
                         aria-label={`License ${track.title}`}
                         title="License track"
                         className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md text-[12px] bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity"
@@ -728,6 +779,7 @@ export default function LibraryPage() {
                     </button>
                     <button
                       type="button"
+                      onClick={() => openLicense(track)}
                       aria-label={`License ${track.title}`}
                       title="License track"
                       className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md text-[12px] bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity"
@@ -893,6 +945,7 @@ export default function LibraryPage() {
                     </button>
                     <button
                       type="button"
+                      onClick={() => openLicense(track)}
                       aria-label={`License ${track.title}`}
                       title="License track"
                       className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md text-[12px] bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity"
@@ -1058,6 +1111,246 @@ export default function LibraryPage() {
           </div>
         </div>
       )}
+
+      {/* License modal */}
+      {licenseTrack && (() => {
+        const useTypes = [
+          'Commercial ad', 'Social video', 'Brand film', 'Podcast', 'Trailer',
+          'Event', 'TV show', 'Film', 'Internal video', 'Website', 'App',
+          'Experiential', 'Other',
+        ]
+        const mediaOptions = [
+          'TV', 'Paid social', 'Organic social', 'YouTube', 'TikTok', 'Instagram',
+          'Radio', 'Cinema', 'OOH', 'Website', 'Streaming', 'Podcasts',
+          'In-store', 'Live events', 'Internal use',
+        ]
+        const terms = ['3 months', '6 months', '1 year', '2 years', 'Perpetuity']
+        const territories = ['U.S.', 'North America', 'Worldwide', 'Other']
+        const chipBase =
+          'inline-flex items-center h-7 px-2.5 rounded-md text-[12px] border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)]'
+        const chipOff =
+          'border-[var(--color-border-subtle)] bg-[var(--color-background)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)]'
+        const chipOn =
+          'border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-text-primary)]'
+        const labelCls =
+          'mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] mb-2'
+        const sectionCls = 'mb-5'
+        const inputCls =
+          'w-full h-9 px-3 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-background)] text-[13px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] focus:outline-none focus-visible:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)]'
+        return (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="license-title"
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+          >
+            <div
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+              onClick={closeLicense}
+              aria-hidden="true"
+            />
+            <div className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface-elevated)] shadow-2xl">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border-subtle)] flex-shrink-0">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-7 h-7 rounded-md border border-[var(--color-border-default)] bg-[var(--color-background)] flex items-center justify-center flex-shrink-0">
+                    <FileText className="w-3.5 h-3.5 text-[var(--color-accent)]" />
+                  </div>
+                  <div className="min-w-0">
+                    <h2
+                      id="license-title"
+                      className="text-[14px] font-medium text-[var(--color-text-primary)] truncate"
+                    >
+                      License "{licenseTrack.title}"
+                    </h2>
+                    <p className="text-[11.5px] text-[var(--color-text-tertiary)]">
+                      Tell us how you plan to use the track — we'll get back with a quote.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeLicense}
+                  aria-label="Close"
+                  className="inline-flex items-center justify-center w-7 h-7 rounded-md text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {licenseSubmitted ? (
+                <div className="p-8 flex flex-col items-center text-center">
+                  <div className="w-10 h-10 rounded-full border border-[var(--color-border-default)] bg-[var(--color-accent-soft)] flex items-center justify-center mb-4">
+                    <Check className="w-4 h-4 text-[var(--color-accent)]" />
+                  </div>
+                  <div className="text-[14px] text-[var(--color-text-primary)]">
+                    Request received
+                  </div>
+                  <p className="mt-1.5 text-[12.5px] text-[var(--color-text-secondary)] max-w-sm">
+                    A licensing specialist will reach out within one business day with a quote tailored to your use.
+                  </p>
+                  <div className="mt-5">
+                    <Button size="sm" onClick={closeLicense}>Done</Button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="overflow-y-auto px-5 py-5 flex-1">
+                    {/* Type of use */}
+                    <div className={sectionCls}>
+                      <div className={labelCls}>Type of use</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {useTypes.map((u) => (
+                          <button
+                            key={u}
+                            type="button"
+                            onClick={() => setLicenseForm((f) => ({ ...f, useType: u }))}
+                            className={`${chipBase} ${licenseForm.useType === u ? chipOn : chipOff}`}
+                          >
+                            {u}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Media / platforms */}
+                    <div className={sectionCls}>
+                      <div className={labelCls}>Media / platforms <span className="lowercase tracking-normal text-[var(--color-text-tertiary)]">(select all that apply)</span></div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {mediaOptions.map((m) => (
+                          <button
+                            key={m}
+                            type="button"
+                            onClick={() => toggleMedia(m)}
+                            className={`${chipBase} ${licenseForm.media.includes(m) ? chipOn : chipOff}`}
+                          >
+                            {m}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Term length */}
+                    <div className={sectionCls}>
+                      <div className={labelCls}>Term length</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {terms.map((t) => (
+                          <button
+                            key={t}
+                            type="button"
+                            onClick={() => setLicenseForm((f) => ({ ...f, term: t }))}
+                            className={`${chipBase} ${licenseForm.term === t ? chipOn : chipOff}`}
+                          >
+                            {t}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Territory */}
+                    <div className={sectionCls}>
+                      <div className={labelCls}>Territory</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {territories.map((t) => (
+                          <button
+                            key={t}
+                            type="button"
+                            onClick={() => setLicenseForm((f) => ({ ...f, territory: t }))}
+                            className={`${chipBase} ${licenseForm.territory === t ? chipOn : chipOff}`}
+                          >
+                            {t}
+                          </button>
+                        ))}
+                      </div>
+                      {licenseForm.territory === 'Other' && (
+                        <input
+                          type="text"
+                          value={licenseForm.territoryOther}
+                          onChange={(e) =>
+                            setLicenseForm((f) => ({ ...f, territoryOther: e.target.value }))
+                          }
+                          placeholder="Specify countries or regions"
+                          className={`${inputCls} mt-2`}
+                        />
+                      )}
+                    </div>
+
+                    {/* Exclusivity */}
+                    <div className={sectionCls}>
+                      <div className={labelCls}>Exclusivity</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {[
+                          { v: 'non-exclusive', l: 'Non-exclusive' },
+                          { v: 'exclusive', l: 'Exclusive' },
+                        ].map((o) => (
+                          <button
+                            key={o.v}
+                            type="button"
+                            onClick={() =>
+                              setLicenseForm((f) => ({
+                                ...f,
+                                exclusivity: o.v as LicenseForm['exclusivity'],
+                              }))
+                            }
+                            className={`${chipBase} ${licenseForm.exclusivity === o.v ? chipOn : chipOff}`}
+                          >
+                            {o.l}
+                          </button>
+                        ))}
+                      </div>
+                      {licenseForm.exclusivity === 'exclusive' && (
+                        <input
+                          type="text"
+                          value={licenseForm.exclusivityCategory}
+                          onChange={(e) =>
+                            setLicenseForm((f) => ({
+                              ...f,
+                              exclusivityCategory: e.target.value,
+                            }))
+                          }
+                          placeholder="Exclusive category (e.g. financial services, pharma, automotive)"
+                          className={`${inputCls} mt-2`}
+                        />
+                      )}
+                    </div>
+
+                    {/* Brand / client */}
+                    <div className="mb-1">
+                      <div className={labelCls}>Brand / client</div>
+                      <input
+                        type="text"
+                        value={licenseForm.brand}
+                        onChange={(e) =>
+                          setLicenseForm((f) => ({ ...f, brand: e.target.value }))
+                        }
+                        placeholder="Advertiser or company name"
+                        className={inputCls}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3 px-5 py-4 border-t border-[var(--color-border-subtle)] flex-shrink-0">
+                    <button
+                      type="button"
+                      onClick={closeLicense}
+                      className="text-[12.5px] text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <Button
+                      size="sm"
+                      disabled={!licenseValid}
+                      onClick={() => setLicenseSubmitted(true)}
+                    >
+                      Submit request
+                      <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )
+      })()}
 
       <Footer />
     </main>
