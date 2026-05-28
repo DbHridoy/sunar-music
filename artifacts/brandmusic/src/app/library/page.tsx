@@ -428,14 +428,15 @@ export default function LibraryPage() {
             </div>
           ) : (
             <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] divide-y divide-[var(--color-border-subtle)] overflow-hidden">
-              {filteredTracks.map(({ track, match }) => {
+              {filteredTracks.map(({ track, match }, i) => {
                 const relevance = hasQuery
                   ? Math.min(100, Math.round((match.score / maxScore) * 100))
                   : 0
                 return (
                 <div
-                  key={track.id}
-                  className="group flex items-center gap-4 px-4 py-3 hover:bg-white/[0.02] transition-colors"
+                  key={`${committedQuery}-${track.id}`}
+                  style={{ animationDelay: `${i * 45}ms` }}
+                  className="track-row-in group flex items-center gap-4 px-4 py-3 hover:bg-white/[0.02] transition-colors"
                 >
                   <div className="relative flex-shrink-0">
                     <img
