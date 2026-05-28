@@ -47,9 +47,9 @@ const plans = [
     name: 'Starter',
     price: '$0',
     cadence: '/ forever',
-    blurb: 'Browse the library and try video sync.',
+    blurb: 'Start Searching and try video sync.',
     features: ['Unlimited search', 'Video sync previews', 'Personal shortlists'],
-    cta: 'Browse the library',
+    cta: 'Start Searching',
     href: '/library',
     featured: false,
   },
@@ -64,7 +64,7 @@ const plans = [
       'Stems on every track',
       'Shared team shortlists',
     ],
-    cta: 'Browse the library',
+    cta: 'Start Searching',
     href: '/library',
     featured: true,
   },
@@ -79,7 +79,7 @@ const plans = [
       'Sonic branding workshops',
       'Dedicated account team',
     ],
-    cta: 'Browse the library',
+    cta: 'Start Searching',
     href: '/library',
     featured: false,
   },
@@ -162,7 +162,7 @@ export default function Home() {
 
           <div className="mt-10 flex items-center justify-center gap-3">
             <Link href="/library">
-              <Button size="md">Browse the library</Button>
+              <Button size="md">Start Searching</Button>
             </Link>
           </div>
         </div>
