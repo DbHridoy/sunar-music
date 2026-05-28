@@ -257,7 +257,7 @@ export default function Home() {
                 eyebrow: 'Video Sync',
                 title: 'Video Sync Preview',
                 description:
-                  'Upload an edit and hear options synced against your footage — before you license. Present shortlists to clients and get approvals faster.',
+                  'Upload an edit and hear options synced against your footage — before you license.',
                 bullets: [
                   'Drag-and-drop upload',
                   'Real-time audio sync',
