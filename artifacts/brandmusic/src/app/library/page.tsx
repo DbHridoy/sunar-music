@@ -21,8 +21,6 @@ import { useFavorites } from '@/hooks/useFavorites'
 import { usePlaylists } from '@/hooks/usePlaylists'
 import { useAuth } from '@/contexts/AuthContext'
 
-const moods = ['Energetic', 'Calm', 'Uplifting', 'Dark', 'Emotional', 'Confident', 'Playful', 'Dramatic']
-const genres = ['All', 'Corporate', 'Ambient', 'Electronic', 'Cinematic', 'Pop', 'Hip Hop', 'Acoustic', 'Tech']
 
 const collections = [
   {
@@ -60,8 +58,6 @@ export default function LibraryPage() {
   const { favorites } = useFavorites()
   const { playlists } = usePlaylists()
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedMood, setSelectedMood] = useState<string | null>(null)
-  const [selectedGenre, setSelectedGenre] = useState<string>('All')
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const [syncOpen, setSyncOpen] = useState(false)
   const [syncFile, setSyncFile] = useState<File | null>(null)
@@ -95,12 +91,9 @@ export default function LibraryPage() {
       track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       track.artist.toLowerCase().includes(searchQuery.toLowerCase()) ||
       track.genre.some((g) => g.toLowerCase().includes(searchQuery.toLowerCase()))
-    const matchesMood = !selectedMood || track.mood.includes(selectedMood)
-    const matchesGenre =
-      selectedGenre === 'All' || track.genre.some((g) => g === selectedGenre)
     const matchesFavorites =
       !showFavoritesOnly || favorites.some((fav) => fav.track_id === track.id)
-    return matchesSearch && matchesMood && matchesGenre && matchesFavorites
+    return matchesSearch && matchesFavorites
   })
 
 
@@ -145,49 +138,6 @@ export default function LibraryPage() {
               placeholder="Confident but not aggressive, for a tech startup…"
               className="flex-1 bg-transparent text-[14px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] outline-none py-2"
             />
-          </div>
-
-          {/* Genre row */}
-          <div className="mt-5 flex flex-wrap items-center gap-2">
-            {genres.map((g) => {
-              const active = selectedGenre === g
-              return (
-                <button
-                  key={g}
-                  onClick={() => setSelectedGenre(g)}
-                  className={`h-8 px-3 rounded-md text-[12.5px] border transition-colors ${
-                    active
-                      ? 'bg-[var(--color-accent)] border-[var(--color-accent)] text-white'
-                      : 'bg-[var(--color-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)]'
-                  }`}
-                >
-                  {g}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Mood row */}
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] mr-1">
-              Mood
-            </span>
-            {moods.map((mood) => {
-              const active = selectedMood === mood
-              return (
-                <button
-                  key={mood}
-                  onClick={() => setSelectedMood(active ? null : mood)}
-                  className={`h-8 px-3 rounded-md text-[12.5px] border transition-colors ${
-                    active
-                      ? 'bg-[var(--color-accent-soft)] border-[var(--color-accent)] text-[var(--color-accent)]'
-                      : 'bg-[var(--color-surface)] border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)]'
-                  }`}
-                >
-                  {mood}
-                </button>
-              )
-            })}
           </div>
 
           {user && (
