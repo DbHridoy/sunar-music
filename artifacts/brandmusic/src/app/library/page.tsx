@@ -101,7 +101,6 @@ const suggestedPrompts = [
   'Calm piano for wellness',
   'Epic cinematic trailer',
   'Warm acoustic brand story',
-  'Playful product reveal',
 ]
 import FavoriteButton from '@/components/ui/FavoriteButton'
 import AddToPlaylistButton from '@/components/ui/AddToPlaylistButton'
