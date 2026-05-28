@@ -61,7 +61,6 @@ const plans = [
     blurb: 'For agencies licensing music every week.',
     features: [
       'Everything in Starter',
-      'Unlimited commercial licensing',
       'Stems on every track',
       'Shared team shortlists',
     ],
