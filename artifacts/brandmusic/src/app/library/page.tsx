@@ -332,7 +332,14 @@ export default function LibraryPage() {
       </section>
 
       {/* Featured collections */}
-      <section className="pb-16">
+      <section
+        aria-hidden={hasQuery || isAnalyzing}
+        className={`overflow-hidden transition-all ease-in-out ${
+          hasQuery || isAnalyzing
+            ? 'max-h-0 opacity-0 pb-0 duration-300'
+            : 'max-h-[1200px] opacity-100 pb-16 duration-500'
+        }`}
+      >
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-end justify-between mb-6">
             <div>
