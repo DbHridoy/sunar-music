@@ -237,20 +237,13 @@ export default function LibraryPage() {
       <section className="pb-8">
         <div className="max-w-4xl mx-auto px-6">
           <div className="flex items-center gap-2 p-1.5 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface)] focus-within:border-[var(--color-accent)] transition-colors">
-            <div className="pl-3 text-[var(--color-text-tertiary)]">
-              {isAnalyzing ? (
-                <Loader2 className="w-4 h-4 animate-spin text-[var(--color-accent)]" />
-              ) : (
-                <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />
-              )}
-            </div>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               aria-label="Describe the music you need"
               placeholder="Describe the mood, scene, or feeling — e.g. confident tech startup launch"
-              className="flex-1 bg-transparent text-[14px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] outline-none py-2"
+              className="flex-1 bg-transparent text-[14px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] outline-none py-2 pl-3"
             />
             {searchQuery && (
               <button
