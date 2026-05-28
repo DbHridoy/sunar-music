@@ -775,8 +775,8 @@ export default function LibraryPage() {
         <div className="max-w-6xl mx-auto px-6 mt-14">
           <div className="flex items-end justify-between mb-5">
             <div>
-              <h2 className="text-[15px] font-medium text-[var(--color-text-primary)] flex items-center gap-2">
-                <span className="text-base">🎧</span> Staff Picks
+              <h2 className="text-[15px] font-medium text-[var(--color-text-primary)]">
+                Staff Picks
               </h2>
               <p className="mt-1 text-[12.5px] text-[var(--color-text-tertiary)]">
                 Our favorite tracks right now — updated weekly.
