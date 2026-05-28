@@ -150,19 +150,27 @@ export default function LibraryPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
 
+  const analyzeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
-    if (!searchQuery.trim()) {
+    return () => {
+      if (analyzeTimer.current) clearTimeout(analyzeTimer.current)
+    }
+  }, [])
+
+  const submitSearch = () => {
+    if (analyzeTimer.current) clearTimeout(analyzeTimer.current)
+    const q = searchQuery.trim()
+    if (!q) {
       setCommittedQuery('')
       setIsAnalyzing(false)
       return
     }
     setIsAnalyzing(true)
-    const t = setTimeout(() => {
-      setCommittedQuery(searchQuery)
+    analyzeTimer.current = setTimeout(() => {
+      setCommittedQuery(q)
       setIsAnalyzing(false)
     }, 650)
-    return () => clearTimeout(t)
-  }, [searchQuery])
+  }
   const [syncOpen, setSyncOpen] = useState(false)
   const [syncFile, setSyncFile] = useState<File | null>(null)
   const [syncStage, setSyncStage] = useState<'idle' | 'analyzing' | 'ready'>('idle')
@@ -236,7 +244,13 @@ export default function LibraryPage() {
       {/* Search + filters */}
       <section className="pb-8">
         <div className="max-w-4xl mx-auto px-6">
-          <div className="flex items-center gap-2 p-1.5 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface)] focus-within:border-[var(--color-accent)] transition-colors">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              submitSearch()
+            }}
+            className="flex items-center gap-2 p-1.5 rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface)] focus-within:border-[var(--color-accent)] transition-colors"
+          >
             <input
               type="text"
               value={searchQuery}
@@ -248,14 +262,33 @@ export default function LibraryPage() {
             {searchQuery && (
               <button
                 type="button"
-                onClick={() => setSearchQuery('')}
+                onClick={() => {
+                  setSearchQuery('')
+                  setCommittedQuery('')
+                  setIsAnalyzing(false)
+                  if (analyzeTimer.current) clearTimeout(analyzeTimer.current)
+                }}
                 aria-label="Clear search"
-                className="mr-1 p-1.5 rounded-md text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] hover:bg-white/[0.04] transition-colors"
+                className="p-1.5 rounded-md text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] hover:bg-white/[0.04] transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             )}
-          </div>
+            <Button
+              type="submit"
+              size="sm"
+              disabled={!searchQuery.trim() || isAnalyzing}
+            >
+              {isAnalyzing ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <>
+                  Search
+                  <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+                </>
+              )}
+            </Button>
+          </form>
 
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] mr-1">
@@ -265,7 +298,15 @@ export default function LibraryPage() {
               <button
                 key={p}
                 type="button"
-                onClick={() => setSearchQuery(p)}
+                onClick={() => {
+                  setSearchQuery(p)
+                  if (analyzeTimer.current) clearTimeout(analyzeTimer.current)
+                  setIsAnalyzing(true)
+                  analyzeTimer.current = setTimeout(() => {
+                    setCommittedQuery(p)
+                    setIsAnalyzing(false)
+                  }, 650)
+                }}
                 className="h-8 px-3 rounded-md text-[12.5px] border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)] transition-colors"
               >
                 {p}
