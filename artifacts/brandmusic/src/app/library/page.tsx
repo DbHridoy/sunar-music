@@ -303,6 +303,8 @@ export default function LibraryPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   type LicenseForm = {
+    fullName: string
+    agencyName: string
     media: string[]
     term: string
     territory: string
@@ -312,6 +314,8 @@ export default function LibraryPage() {
     brand: string
   }
   const emptyLicenseForm: LicenseForm = {
+    fullName: '',
+    agencyName: '',
     media: [],
     term: '',
     territory: '',
@@ -340,6 +344,8 @@ export default function LibraryPage() {
     }))
   }
   const licenseValid =
+    licenseForm.fullName.trim() !== '' &&
+    licenseForm.agencyName.trim() !== '' &&
     licenseForm.media.length > 0 &&
     licenseForm.term !== '' &&
     licenseForm.territory !== '' &&
@@ -1186,6 +1192,31 @@ export default function LibraryPage() {
               ) : (
                 <>
                   <div className="overflow-y-auto px-5 py-5 flex-1">
+                    {/* Your details */}
+                    <div className={sectionCls}>
+                      <div className={labelCls}>Your details</div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <input
+                          type="text"
+                          value={licenseForm.fullName}
+                          onChange={(e) =>
+                            setLicenseForm((f) => ({ ...f, fullName: e.target.value }))
+                          }
+                          placeholder="Full name"
+                          className={inputCls}
+                        />
+                        <input
+                          type="text"
+                          value={licenseForm.agencyName}
+                          onChange={(e) =>
+                            setLicenseForm((f) => ({ ...f, agencyName: e.target.value }))
+                          }
+                          placeholder="Agency name"
+                          className={inputCls}
+                        />
+                      </div>
+                    </div>
+
                     {/* Media / platforms */}
                     <div className={sectionCls}>
                       <div className={labelCls}>Media / platforms <span className="lowercase tracking-normal text-[var(--color-text-tertiary)]">(select all that apply)</span></div>
