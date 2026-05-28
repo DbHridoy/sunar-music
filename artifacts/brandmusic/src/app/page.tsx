@@ -58,7 +58,7 @@ const plans = [
     name: 'Studio',
     price: '$49',
     cadence: '/ seat / mo',
-    blurb: 'For agencies licensing music every week.',
+    blurb: 'For agencies licensing music often.',
     features: [
       'Everything in Starter',
       'Stems on every track',
