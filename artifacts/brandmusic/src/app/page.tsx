@@ -276,7 +276,7 @@ export default function Home() {
                   'Download the full mix or access mixed stems when you need more flexibility.',
                 bullets: [],
                 image:
-                  'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1200&h=900&fit=crop',
+                  'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=1200&h=900&fit=crop',
               },
             ].map((f, idx) => {
               const reverse = idx % 2 === 1
