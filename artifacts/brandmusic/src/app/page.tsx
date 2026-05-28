@@ -148,7 +148,7 @@ export default function Home() {
       <Navigation />
 
       {/* Hero */}
-      <section className="relative pt-32 pb-24 overflow-hidden">
+      <section className="relative pt-32 pb-10 overflow-hidden">
         <div className="absolute inset-0 hero-glow pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <h1 className="h-display text-[44px] sm:text-[56px] md:text-[64px] text-[var(--color-text-primary)]">
