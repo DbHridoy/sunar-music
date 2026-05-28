@@ -38,9 +38,8 @@ const steps = [
 ]
 
 const proof = [
-  'Used by 250+ agencies',
-  '50,000+ cleared tracks',
-  'Stems on every release',
+  '3,000 Cleared Tracks',
+  'Stems',
   'Free video sync preview',
 ]
 
