@@ -91,8 +91,8 @@ const faqs = [
     a: 'Describe the brief in plain language — mood, energy, references, even rough tempo. The model maps your description to tracks tagged across hundreds of dimensions and surfaces the closest fits. You can refine in conversation, just like working with a supervisor.',
   },
   {
-    q: 'Are tracks cleared for commercial use?',
-    a: 'Yes. Every track in the library is professionally produced and cleared for commercial use under a single, transparent license. No hidden royalties, no surprise sync fees.',
+    q: 'How do I license a track?',
+    a: 'By clicking on the License button next to the desired track, you will be prompted to contact us with the necessary information for us to provide a quote.',
   },
   {
     q: 'Do I really get stems on every track?',
