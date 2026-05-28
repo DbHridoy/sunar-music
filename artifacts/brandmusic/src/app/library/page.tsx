@@ -110,6 +110,9 @@ const collections = [
     blurb: 'Forward-momentum cues for product launches and brand films.',
     cover:
       'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop',
+    match: (t: { genre: string[]; mood: string[] }) =>
+      t.genre.some((g: string) => ['Electronic', 'Tech', 'Corporate', 'Synthwave'].includes(g)) ||
+      t.mood.some((m: string) => ['Modern', 'Innovative', 'Confident'].includes(m)),
   },
   {
     title: 'Cinematic Brands',
@@ -117,6 +120,9 @@ const collections = [
     blurb: 'Strings, swells, and emotional arcs for hero spots.',
     cover:
       'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop',
+    match: (t: { genre: string[]; mood: string[] }) =>
+      t.genre.some((g: string) => ['Cinematic', 'Orchestral'].includes(g)) ||
+      t.mood.some((m: string) => ['Epic', 'Dramatic', 'Powerful', 'Emotional'].includes(m)),
   },
   {
     title: 'Ambient & Calm',
@@ -124,6 +130,9 @@ const collections = [
     blurb: 'Atmospheric textures for wellness, fashion, and editorial.',
     cover:
       'https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=600&h=400&fit=crop',
+    match: (t: { genre: string[]; mood: string[] }) =>
+      t.genre.some((g: string) => ['Ambient', 'Piano', 'Acoustic'].includes(g)) ||
+      t.mood.some((m: string) => ['Calm', 'Peaceful', 'Reflective'].includes(m)),
   },
   {
     title: 'Confident Pop',
@@ -131,6 +140,9 @@ const collections = [
     blurb: 'Modern, hooky tracks for retail, lifestyle, and social.',
     cover:
       'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&h=400&fit=crop',
+    match: (t: { genre: string[]; mood: string[] }) =>
+      t.genre.some((g: string) => ['Pop', 'Funk'].includes(g)) ||
+      t.mood.some((m: string) => ['Playful', 'Fun', 'Confident', 'Uplifting'].includes(m)),
   },
 ]
 
@@ -138,6 +150,8 @@ export default function LibraryPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [committedQuery, setCommittedQuery] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [selectedCollection, setSelectedCollection] = useState<string | null>(null)
+  const collectionResultsRef = useRef<HTMLDivElement | null>(null)
 
   const analyzeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
@@ -154,12 +168,31 @@ export default function LibraryPage() {
       setIsAnalyzing(false)
       return
     }
+    setSelectedCollection(null)
     setIsAnalyzing(true)
     analyzeTimer.current = setTimeout(() => {
       setCommittedQuery(q)
       setIsAnalyzing(false)
     }, 650)
   }
+
+  const openCollection = (title: string) => {
+    setSearchQuery('')
+    setCommittedQuery('')
+    setIsAnalyzing(false)
+    if (analyzeTimer.current) clearTimeout(analyzeTimer.current)
+    setSelectedCollection(title)
+    requestAnimationFrame(() => {
+      collectionResultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
+
+  const activeCollection = selectedCollection
+    ? collections.find((c) => c.title === selectedCollection) ?? null
+    : null
+  const collectionTracks = activeCollection
+    ? mockTracks.filter((t) => activeCollection.match(t))
+    : []
   const [syncOpen, setSyncOpen] = useState(false)
   const [syncFile, setSyncFile] = useState<File | null>(null)
   const [syncStage, setSyncStage] = useState<'idle' | 'analyzing' | 'ready'>('idle')
@@ -357,7 +390,13 @@ export default function LibraryPage() {
               <button
                 key={c.title}
                 type="button"
-                className="group text-left rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] overflow-hidden hover:border-[var(--color-border-default)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)]"
+                onClick={() => openCollection(c.title)}
+                aria-pressed={selectedCollection === c.title}
+                className={`group text-left rounded-lg border bg-[var(--color-surface)] overflow-hidden transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] ${
+                  selectedCollection === c.title
+                    ? 'border-[var(--color-accent)]'
+                    : 'border-[var(--color-border-subtle)] hover:border-[var(--color-border-default)]'
+                }`}
               >
                 <div className="relative aspect-[5/3] overflow-hidden">
                   <img
@@ -383,6 +422,126 @@ export default function LibraryPage() {
           </div>
         </div>
       </section>
+
+      {/* Collection results */}
+      {activeCollection && !hasQuery && !isAnalyzing && (
+        <section className="pb-24" ref={collectionResultsRef}>
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="flex items-baseline justify-between mb-4">
+              <h2 className="text-[14px] font-medium text-[var(--color-text-primary)] flex items-center gap-2">
+                <Music2 className="w-3.5 h-3.5 text-[var(--color-accent)]" />
+                {activeCollection.title}
+                <span className="text-[12px] text-[var(--color-text-tertiary)] font-normal">
+                  collection
+                </span>
+              </h2>
+              <div className="flex items-center gap-3">
+                <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
+                  {collectionTracks.length}{' '}
+                  {collectionTracks.length === 1 ? 'track' : 'tracks'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedCollection(null)}
+                  className="inline-flex items-center gap-1 text-[12px] text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
+                  aria-label="Close collection"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  Close
+                </button>
+              </div>
+            </div>
+
+            {collectionTracks.length === 0 ? (
+              <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] py-16 text-center">
+                <Music2 className="w-6 h-6 text-[var(--color-text-tertiary)] mx-auto mb-3" />
+                <h3 className="text-[14px] font-medium text-[var(--color-text-primary)] mb-1">
+                  No tracks in this collection yet
+                </h3>
+              </div>
+            ) : (
+              <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] divide-y divide-[var(--color-border-subtle)] overflow-hidden">
+                {collectionTracks.map((track, i) => (
+                  <div
+                    key={`${activeCollection.title}-${track.id}`}
+                    style={{ animationDelay: `${i * 45}ms` }}
+                    className="track-row-in group flex items-center gap-4 px-4 py-3 hover:bg-white/[0.02] transition-colors"
+                  >
+                    <div className="relative flex-shrink-0">
+                      <img
+                        src={track.cover_url}
+                        alt={track.title}
+                        className="w-11 h-11 rounded-md object-cover border border-[var(--color-border-subtle)]"
+                      />
+                      <button
+                        type="button"
+                        aria-label={`Play ${track.title}`}
+                        className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-opacity rounded-md"
+                      >
+                        <Play className="w-4 h-4 text-white" />
+                      </button>
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[13.5px] text-[var(--color-text-primary)] truncate">
+                        {track.title}
+                      </div>
+                      <div className="text-[12px] text-[var(--color-text-tertiary)] truncate">
+                        {track.artist}
+                      </div>
+                    </div>
+
+                    <div className="hidden md:flex items-center justify-start gap-1.5 flex-shrink-0 w-[150px]">
+                      {track.genre.slice(0, 2).map((g) => (
+                        <span
+                          key={g}
+                          className="px-2 py-0.5 rounded border border-[var(--color-border-subtle)] text-[11px] text-[var(--color-text-secondary)] whitespace-nowrap"
+                        >
+                          {g}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="hidden lg:grid grid-cols-2 gap-x-4 flex-shrink-0 w-[120px] text-right">
+                      <span className="mono text-[11px] text-[var(--color-text-tertiary)] tabular-nums text-right">
+                        {track.bpm} BPM
+                      </span>
+                      <span className="mono text-[11px] text-[var(--color-text-tertiary)] text-right">
+                        {track.key}
+                      </span>
+                    </div>
+
+                    <span className="mono text-[11px] text-[var(--color-text-tertiary)] flex-shrink-0 w-[40px] text-right tabular-nums">
+                      {formatDuration(track.duration)}
+                    </span>
+
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                      <button
+                        type="button"
+                        aria-label={`Download ${track.title}`}
+                        title="Download preview"
+                        className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md text-[12px] border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)] transition-colors"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span className="hidden md:inline">Download</span>
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={`License ${track.title}`}
+                        title="License track"
+                        className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md text-[12px] bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity"
+                      >
+                        <FileText className="w-3.5 h-3.5" />
+                        <span className="hidden md:inline">License</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Results */}
       {(hasQuery || isAnalyzing) && (
