@@ -446,158 +446,6 @@ export default function LibraryPage() {
         </div>
       </section>
 
-      {/* Featured collections */}
-      <section
-        aria-hidden={hasQuery || isAnalyzing}
-        className={`overflow-hidden transition-all ease-in-out ${
-          hasQuery || isAnalyzing
-            ? 'max-h-0 opacity-0 pb-0 duration-300'
-            : 'max-h-[1200px] opacity-100 pb-16 duration-500'
-        }`}
-      >
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-end justify-between mb-5">
-            <div>
-              <h2 className="text-[15px] font-medium text-[var(--color-text-primary)]">
-                Featured playlists & themes
-              </h2>
-              <p className="mt-1 text-[12.5px] text-[var(--color-text-tertiary)]">
-                Hand-picked sets across moods, genres, and use cases.
-              </p>
-            </div>
-            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] hidden sm:block">
-              {playlists.length} playlists
-            </span>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {playlists.map((c) => (
-              <button
-                key={c.title}
-                type="button"
-                onClick={() => openCollection(c.title)}
-                aria-pressed={selectedCollection === c.title}
-                className={`group text-left rounded-md overflow-hidden transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] ${
-                  selectedCollection === c.title ? 'ring-1 ring-[var(--color-accent)]' : ''
-                }`}
-              >
-                <div className="relative aspect-square overflow-hidden rounded-md border border-[var(--color-border-subtle)]">
-                  <img
-                    src={c.cover}
-                    alt=""
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-2.5">
-                    <div className="text-[12.5px] font-medium text-white leading-tight line-clamp-2">
-                      {c.title}
-                    </div>
-                    <div className="mt-0.5 mono text-[10px] uppercase tracking-[0.16em] text-white/70">
-                      {c.tracks} tracks
-                    </div>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Staff Picks */}
-        <div className="max-w-6xl mx-auto px-6 mt-14">
-          <div className="flex items-end justify-between mb-5">
-            <div>
-              <h2 className="text-[15px] font-medium text-[var(--color-text-primary)] flex items-center gap-2">
-                <span className="text-base">🎧</span> Staff Picks
-              </h2>
-              <p className="mt-1 text-[12.5px] text-[var(--color-text-tertiary)]">
-                Our favorite tracks right now — updated weekly.
-              </p>
-            </div>
-            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] hidden sm:block">
-              Popular
-            </span>
-          </div>
-          <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] divide-y divide-[var(--color-border-subtle)] overflow-hidden">
-            {mockTracks.slice(0, 7).map((track) => {
-              const bars = waveformBars(track.id)
-              return (
-                <div
-                  key={`staff-${track.id}`}
-                  className="group flex items-center gap-4 px-4 py-3 hover:bg-white/[0.02] transition-colors"
-                >
-                  <div className="relative flex-shrink-0">
-                    <img
-                      src={track.cover_url}
-                      alt={track.title}
-                      className="w-10 h-10 rounded-md object-cover border border-[var(--color-border-subtle)]"
-                    />
-                    <button
-                      type="button"
-                      aria-label={`Play ${track.title}`}
-                      className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-opacity rounded-md"
-                    >
-                      <Play className="w-3.5 h-3.5 text-white" />
-                    </button>
-                  </div>
-
-                  <div className="min-w-0 w-[160px] flex-shrink-0">
-                    <div className="text-[13px] text-[var(--color-text-primary)] truncate">
-                      {track.title}
-                    </div>
-                    <div className="text-[11.5px] text-[var(--color-text-tertiary)] truncate">
-                      {track.artist}
-                    </div>
-                  </div>
-
-                  <div className="hidden md:flex flex-1 h-8 items-end gap-[2px] min-w-0">
-                    {bars.map((b, i) => (
-                      <div
-                        key={i}
-                        style={{ height: `${Math.round(b * 100)}%` }}
-                        className="flex-1 bg-[var(--color-border-default)] group-hover:bg-[var(--color-text-tertiary)] rounded-[1px] transition-colors"
-                      />
-                    ))}
-                  </div>
-
-                  <span className="mono text-[11px] text-[var(--color-text-tertiary)] flex-shrink-0 w-[40px] text-right tabular-nums">
-                    {formatDuration(track.duration)}
-                  </span>
-
-                  <div className="hidden lg:flex items-center gap-1.5 flex-shrink-0 w-[140px]">
-                    {track.mood.slice(0, 2).map((m) => (
-                      <span
-                        key={m}
-                        className="px-2 py-0.5 rounded border border-[var(--color-border-subtle)] text-[10.5px] text-[var(--color-text-secondary)] whitespace-nowrap"
-                      >
-                        {m}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-1.5 flex-shrink-0">
-                    <button
-                      type="button"
-                      aria-label={`Download ${track.title}`}
-                      title="Download preview"
-                      className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)] transition-colors"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label={`License ${track.title}`}
-                      title="License track"
-                      className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md text-[12px] bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity"
-                    >
-                      <FileText className="w-3.5 h-3.5" />
-                      <span className="hidden xl:inline">License</span>
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* Collection results */}
       {activeCollection && !hasQuery && !isAnalyzing && (
@@ -874,6 +722,152 @@ export default function LibraryPage() {
         </div>
       </section>
       )}
+
+      {/* Featured collections */}
+      <section className="pb-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex items-end justify-between mb-5">
+            <div>
+              <h2 className="text-[15px] font-medium text-[var(--color-text-primary)]">
+                Featured playlists & themes
+              </h2>
+              <p className="mt-1 text-[12.5px] text-[var(--color-text-tertiary)]">
+                Hand-picked sets across moods, genres, and use cases.
+              </p>
+            </div>
+            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] hidden sm:block">
+              {playlists.length} playlists
+            </span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {playlists.map((c) => (
+              <button
+                key={c.title}
+                type="button"
+                onClick={() => openCollection(c.title)}
+                aria-pressed={selectedCollection === c.title}
+                className={`group text-left rounded-md overflow-hidden transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] ${
+                  selectedCollection === c.title ? 'ring-1 ring-[var(--color-accent)]' : ''
+                }`}
+              >
+                <div className="relative aspect-square overflow-hidden rounded-md border border-[var(--color-border-subtle)]">
+                  <img
+                    src={c.cover}
+                    alt=""
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-2.5">
+                    <div className="text-[12.5px] font-medium text-white leading-tight line-clamp-2">
+                      {c.title}
+                    </div>
+                    <div className="mt-0.5 mono text-[10px] uppercase tracking-[0.16em] text-white/70">
+                      {c.tracks} tracks
+                    </div>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Staff Picks */}
+        <div className="max-w-6xl mx-auto px-6 mt-14">
+          <div className="flex items-end justify-between mb-5">
+            <div>
+              <h2 className="text-[15px] font-medium text-[var(--color-text-primary)] flex items-center gap-2">
+                <span className="text-base">🎧</span> Staff Picks
+              </h2>
+              <p className="mt-1 text-[12.5px] text-[var(--color-text-tertiary)]">
+                Our favorite tracks right now — updated weekly.
+              </p>
+            </div>
+            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] hidden sm:block">
+              Popular
+            </span>
+          </div>
+          <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] divide-y divide-[var(--color-border-subtle)] overflow-hidden">
+            {mockTracks.slice(0, 7).map((track) => {
+              const bars = waveformBars(track.id)
+              return (
+                <div
+                  key={`staff-${track.id}`}
+                  className="group flex items-center gap-4 px-4 py-3 hover:bg-white/[0.02] transition-colors"
+                >
+                  <div className="relative flex-shrink-0">
+                    <img
+                      src={track.cover_url}
+                      alt={track.title}
+                      className="w-10 h-10 rounded-md object-cover border border-[var(--color-border-subtle)]"
+                    />
+                    <button
+                      type="button"
+                      aria-label={`Play ${track.title}`}
+                      className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-opacity rounded-md"
+                    >
+                      <Play className="w-3.5 h-3.5 text-white" />
+                    </button>
+                  </div>
+
+                  <div className="min-w-0 w-[160px] flex-shrink-0">
+                    <div className="text-[13px] text-[var(--color-text-primary)] truncate">
+                      {track.title}
+                    </div>
+                    <div className="text-[11.5px] text-[var(--color-text-tertiary)] truncate">
+                      {track.artist}
+                    </div>
+                  </div>
+
+                  <div className="hidden md:flex flex-1 h-8 items-end gap-[2px] min-w-0">
+                    {bars.map((b, i) => (
+                      <div
+                        key={i}
+                        style={{ height: `${Math.round(b * 100)}%` }}
+                        className="flex-1 bg-[var(--color-border-default)] group-hover:bg-[var(--color-text-tertiary)] rounded-[1px] transition-colors"
+                      />
+                    ))}
+                  </div>
+
+                  <span className="mono text-[11px] text-[var(--color-text-tertiary)] flex-shrink-0 w-[40px] text-right tabular-nums">
+                    {formatDuration(track.duration)}
+                  </span>
+
+                  <div className="hidden lg:flex items-center gap-1.5 flex-shrink-0 w-[140px]">
+                    {track.mood.slice(0, 2).map((m) => (
+                      <span
+                        key={m}
+                        className="px-2 py-0.5 rounded border border-[var(--color-border-subtle)] text-[10.5px] text-[var(--color-text-secondary)] whitespace-nowrap"
+                      >
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <button
+                      type="button"
+                      aria-label={`Download ${track.title}`}
+                      title="Download preview"
+                      className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)] transition-colors"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`License ${track.title}`}
+                      title="License track"
+                      className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md text-[12px] bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity"
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      <span className="hidden xl:inline">License</span>
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* Video Sync modal */}
       {syncOpen && (
