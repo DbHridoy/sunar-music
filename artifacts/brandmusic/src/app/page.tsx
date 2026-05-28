@@ -211,7 +211,7 @@ export default function Home() {
               How it works
             </span>
             <h2 className="h-display text-[32px] md:text-[40px] mt-3">
-              From brief to final mix in minutes.
+              From a feeling to the right track
             </h2>
             <p className="mt-4 text-[15px] text-[var(--color-text-secondary)] leading-relaxed">
               A focused workflow for creative directors, producers, and brand teams. No endless scrolling, no clearance surprises.
