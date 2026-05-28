@@ -272,13 +272,9 @@ export default function Home() {
                 icon: Sliders,
                 eyebrow: 'Stems',
                 title: 'Stem Access',
-                description: '',
-                bullets: [
-                  'Isolated instrument tracks',
-                  'Adjust levels independently',
-                  'Remove or emphasize elements',
-                  'Consistent across releases',
-                ],
+                description:
+                  'Download the full mix or access mixed stems when you need more flexibility.',
+                bullets: [],
                 image:
                   'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1200&h=900&fit=crop',
               },
@@ -306,17 +302,19 @@ export default function Home() {
                         {f.description}
                       </p>
                     )}
-                    <ul className="space-y-2.5">
-                      {f.bullets.map((b) => (
-                        <li
-                          key={b}
-                          className="flex items-start gap-2.5 text-[13.5px] text-[var(--color-text-secondary)]"
-                        >
-                          <span className="mt-1.5 w-1 h-1 rounded-full bg-[var(--color-accent)] flex-shrink-0" />
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
+                    {f.bullets.length > 0 && (
+                      <ul className="space-y-2.5">
+                        {f.bullets.map((b) => (
+                          <li
+                            key={b}
+                            className="flex items-start gap-2.5 text-[13.5px] text-[var(--color-text-secondary)]"
+                          >
+                            <span className="mt-1.5 w-1 h-1 rounded-full bg-[var(--color-accent)] flex-shrink-0" />
+                            {b}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
 
                   <div className={reverse ? 'lg:order-1' : ''}>
