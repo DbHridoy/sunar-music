@@ -262,7 +262,6 @@ export default function Home() {
                   'Drag-and-drop upload',
                   'Real-time audio sync',
                   'Local-only processing',
-                  'Export preview videos',
                 ],
                 image:
                   'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&h=900&fit=crop',
