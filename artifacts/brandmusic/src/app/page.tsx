@@ -19,21 +19,21 @@ const steps = [
   {
     n: '01',
     icon: Search,
-    color: 'var(--color-cyan)',
+    color: 'var(--color-accent)',
     title: 'Describe what you need',
     body: 'Type a brief the way you would tell a music supervisor — mood, energy, references. Plain language.',
   },
   {
     n: '02',
     icon: Waves,
-    color: 'var(--color-blue)',
+    color: 'var(--color-accent)',
     title: 'Get matched tracks',
     body: 'Our model surfaces tracks that fit the brief, with stems and licensing details inline.',
   },
   {
     n: '03',
     icon: Layers,
-    color: 'var(--color-purple)',
+    color: 'var(--color-accent)',
     title: 'Sync to your edit',
     body: 'Preview tracks against your footage, share a shortlist with stakeholders, license in one click.',
   },
@@ -113,7 +113,7 @@ export default function Home() {
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <h1 className="h-display text-[44px] sm:text-[56px] md:text-[64px] text-[var(--color-text-primary)]">
             Music that sounds<br />
-            like <span className="text-brand-gradient">your brand.</span>
+            like your brand.
           </h1>
 
           <p className="mt-6 text-[16px] md:text-[17px] text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed">
@@ -205,7 +205,7 @@ export default function Home() {
             {[
               {
                 icon: Search,
-                color: 'var(--color-cyan)',
+                color: 'var(--color-accent)',
                 eyebrow: 'AI Discovery',
                 title: 'AI Search',
                 description:
@@ -220,7 +220,7 @@ export default function Home() {
               },
               {
                 icon: Video,
-                color: 'var(--color-purple)',
+                color: 'var(--color-accent)',
                 eyebrow: 'Video Sync',
                 title: 'Video Sync Preview',
                 description:
@@ -235,7 +235,7 @@ export default function Home() {
               },
               {
                 icon: Sliders,
-                color: 'var(--color-magenta)',
+                color: 'var(--color-accent)',
                 eyebrow: 'Stems',
                 title: 'Stem Access',
                 description:
