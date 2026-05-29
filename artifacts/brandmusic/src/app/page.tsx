@@ -52,7 +52,7 @@ const faqs = [
   },
   {
     q: 'How do I license a track?',
-    a: 'By clicking on the License button next to the desired track, you will be prompted to contact us with the necessary information for us to provide a quote.',
+    a: 'Click on the License button next to the desired track and simply submit our questionnaire.',
   },
   {
     q: 'Do I really get stems on every track?',
