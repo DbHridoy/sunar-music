@@ -1,14 +1,16 @@
+import { useState } from 'react'
 import { Link } from 'wouter'
 import { Check } from 'lucide-react'
 import Navigation from '@/components/ui/Navigation'
 import Footer from '@/components/ui/Footer'
 import Button from '@/components/ui/Button'
 
+type Billing = 'monthly' | 'annual'
+
 const plans = [
   {
     name: 'Starter',
-    price: '$0',
-    cadence: '/ forever',
+    monthly: 0,
     blurb: 'Start Searching and try video sync.',
     features: ['Unlimited search', 'Video sync previews', 'Personal shortlists'],
     cta: 'Start Searching',
@@ -17,8 +19,7 @@ const plans = [
   },
   {
     name: 'Studio',
-    price: '$49',
-    cadence: '/ seat / mo',
+    monthly: 49,
     blurb: 'For agencies licensing music often.',
     features: [
       'Everything in Starter',
@@ -31,8 +32,7 @@ const plans = [
   },
   {
     name: 'Enterprise',
-    price: 'Custom',
-    cadence: '',
+    monthly: null,
     blurb: 'For brand teams and broadcast.',
     features: [
       'Everything in Studio',
@@ -44,9 +44,23 @@ const plans = [
     href: '/library',
     featured: false,
   },
-]
+] as const
+
+const ANNUAL_DISCOUNT = 0.2
+
+function priceFor(plan: (typeof plans)[number], billing: Billing) {
+  if (plan.monthly === null) return { price: 'Custom', cadence: '' }
+  if (plan.monthly === 0) return { price: '$0', cadence: '/ forever' }
+  if (billing === 'annual') {
+    const perSeatMonthly = Math.round(plan.monthly * (1 - ANNUAL_DISCOUNT))
+    return { price: `$${perSeatMonthly}`, cadence: '/ seat / mo · billed annually' }
+  }
+  return { price: `$${plan.monthly}`, cadence: '/ seat / mo' }
+}
 
 export default function PricingPage() {
+  const [billing, setBilling] = useState<Billing>('monthly')
+
   return (
     <main className="min-h-screen bg-[var(--color-background)]">
       <Navigation />
@@ -63,6 +77,40 @@ export default function PricingPage() {
             <p className="mt-4 text-[15px] text-[var(--color-text-secondary)] leading-relaxed">
               Start free and upgrade when your team licenses regularly. No hidden fees, no surprise sync charges.
             </p>
+
+            <div className="mt-8 inline-flex items-center gap-1 p-1 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-surface)]">
+              <button
+                type="button"
+                onClick={() => setBilling('monthly')}
+                className={`h-8 px-4 rounded text-[13px] font-medium transition-colors ${
+                  billing === 'monthly'
+                    ? 'bg-[var(--color-accent)] text-white'
+                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                type="button"
+                onClick={() => setBilling('annual')}
+                className={`h-8 px-4 rounded text-[13px] font-medium transition-colors inline-flex items-center gap-2 ${
+                  billing === 'annual'
+                    ? 'bg-[var(--color-accent)] text-white'
+                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                }`}
+              >
+                Annual
+                <span
+                  className={`mono text-[10px] uppercase tracking-[0.14em] rounded px-1.5 py-0.5 ${
+                    billing === 'annual'
+                      ? 'bg-white/20 text-white'
+                      : 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]'
+                  }`}
+                >
+                  Save 20%
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -70,7 +118,9 @@ export default function PricingPage() {
       <section className="pb-24">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-3 gap-3">
-            {plans.map((p) => (
+            {plans.map((p) => {
+              const { price, cadence } = priceFor(p, billing)
+              return (
               <div
                 key={p.name}
                 className={`rounded-lg border p-6 flex flex-col ${
@@ -91,11 +141,11 @@ export default function PricingPage() {
                 </div>
                 <div className="flex items-baseline gap-1.5 mb-3">
                   <span className="h-display text-[32px] text-[var(--color-text-primary)]">
-                    {p.price}
+                    {price}
                   </span>
-                  {p.cadence && (
+                  {cadence && (
                     <span className="text-[12px] text-[var(--color-text-tertiary)]">
-                      {p.cadence}
+                      {cadence}
                     </span>
                   )}
                 </div>
@@ -121,7 +171,8 @@ export default function PricingPage() {
                   </Button>
                 </Link>
               </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
