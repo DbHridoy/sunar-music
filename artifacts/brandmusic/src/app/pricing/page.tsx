@@ -133,11 +133,6 @@ export default function PricingPage() {
                   <span className="text-[14px] font-medium text-[var(--color-text-primary)]">
                     {p.name}
                   </span>
-                  {p.featured && (
-                    <span className="mono text-[10px] uppercase tracking-[0.18em] text-brand-gradient">
-                      Popular
-                    </span>
-                  )}
                 </div>
                 <div className="flex items-baseline gap-1.5 mb-3">
                   <span className="h-display text-[32px] text-[var(--color-text-primary)]">
