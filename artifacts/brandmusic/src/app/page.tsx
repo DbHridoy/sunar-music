@@ -62,10 +62,6 @@ const faqs = [
     q: 'How does the video sync preview work?',
     a: 'Drop an edit into the preview tool, pick a few candidate tracks, and hear them synced against your footage in the browser. Nothing leaves your machine. Share the result with stakeholders before you license.',
   },
-  {
-    q: 'Can you produce something custom?',
-    a: 'Yes. Our composers take on custom commissions — original cues, sonic branding systems, audio logos — typically delivered in 2–3 weeks.',
-  },
 ]
 
 function Faq() {
