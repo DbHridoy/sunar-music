@@ -99,12 +99,6 @@ function scoreTrack(track: Track, query: string): Match {
   return { score, reasons: Array.from(reasons) }
 }
 
-const suggestedPrompts = [
-  'Confident tech startup launch',
-  'Calm piano for wellness',
-  'Epic cinematic trailer',
-  'Warm acoustic brand story',
-]
 type TrackLike = { genre: string[]; mood: string[] }
 const playlists = [
   {
@@ -524,30 +518,6 @@ export default function LibraryPage() {
               <Disc3 className="w-3.5 h-3.5 text-[var(--color-accent)]" />
               Search a song on Spotify
             </button>
-          </div>
-
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] mr-1">
-              Try
-            </span>
-            {suggestedPrompts.map((p) => (
-              <button
-                key={p}
-                type="button"
-                onClick={() => {
-                  setSearchQuery(p)
-                  if (analyzeTimer.current) clearTimeout(analyzeTimer.current)
-                  setIsAnalyzing(true)
-                  analyzeTimer.current = setTimeout(() => {
-                    setCommittedQuery(p)
-                    setIsAnalyzing(false)
-                  }, 650)
-                }}
-                className="h-8 px-3 rounded-md text-[12.5px] border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)] transition-colors"
-              >
-                {p}
-              </button>
-            ))}
           </div>
 
         </div>
