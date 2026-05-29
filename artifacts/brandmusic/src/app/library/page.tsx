@@ -15,6 +15,8 @@ import {
   Sparkles,
   Download,
   FileText,
+  Link2,
+  Disc3,
 } from 'lucide-react'
 import { mockTracks } from '@/lib/mockTracks'
 import type { Track } from '@/types/database.types'
@@ -257,6 +259,41 @@ export default function LibraryPage() {
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null)
   const collectionResultsRef = useRef<HTMLDivElement | null>(null)
 
+  const [linkModalOpen, setLinkModalOpen] = useState(false)
+  const [refLink, setRefLink] = useState('')
+  const [spotifyModalOpen, setSpotifyModalOpen] = useState(false)
+  const [spotifyQuery, setSpotifyQuery] = useState('')
+
+  const refLinkValid =
+    /(?:open\.spotify\.com|spotify:|youtube\.com|youtu\.be)/i.test(refLink.trim())
+
+  const runReferenceSearch = (label: string) => {
+    setSelectedCollection(null)
+    setSearchQuery('')
+    if (analyzeTimer.current) clearTimeout(analyzeTimer.current)
+    setIsAnalyzing(true)
+    analyzeTimer.current = setTimeout(() => {
+      setCommittedQuery(label)
+      setIsAnalyzing(false)
+    }, 650)
+  }
+
+  const submitRefLink = () => {
+    if (!refLinkValid) return
+    const source = /youtu/i.test(refLink) ? 'YouTube' : 'Spotify'
+    setLinkModalOpen(false)
+    runReferenceSearch(`Tracks similar to your ${source} reference`)
+    setRefLink('')
+  }
+
+  const submitSpotifySearch = () => {
+    const q = spotifyQuery.trim()
+    if (!q) return
+    setSpotifyModalOpen(false)
+    runReferenceSearch(`Tracks similar to "${q}"`)
+    setSpotifyQuery('')
+  }
+
   const analyzeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
     return () => {
@@ -466,6 +503,28 @@ export default function LibraryPage() {
               )}
             </Button>
           </form>
+
+          <div className="mt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] sm:mr-1">
+              Or match a reference
+            </span>
+            <button
+              type="button"
+              onClick={() => setLinkModalOpen(true)}
+              className="inline-flex items-center justify-center gap-2 h-9 px-3.5 rounded-md text-[12.5px] border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)] transition-colors"
+            >
+              <Link2 className="w-3.5 h-3.5 text-[var(--color-accent)]" />
+              Paste a Spotify or YouTube link
+            </button>
+            <button
+              type="button"
+              onClick={() => setSpotifyModalOpen(true)}
+              className="inline-flex items-center justify-center gap-2 h-9 px-3.5 rounded-md text-[12.5px] border border-[var(--color-border-subtle)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-default)] hover:text-[var(--color-text-primary)] transition-colors"
+            >
+              <Disc3 className="w-3.5 h-3.5 text-[var(--color-accent)]" />
+              Search a song on Spotify
+            </button>
+          </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)] mr-1">
@@ -1356,6 +1415,154 @@ export default function LibraryPage() {
           </div>
         )
       })()}
+
+      {/* Paste link modal */}
+      {linkModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="link-title"
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+        >
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setLinkModalOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="relative w-full max-w-md rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface-elevated)] shadow-2xl">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border-subtle)]">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-7 h-7 rounded-md border border-[var(--color-border-default)] bg-[var(--color-background)] flex items-center justify-center flex-shrink-0">
+                  <Link2 className="w-3.5 h-3.5 text-[var(--color-accent)]" />
+                </div>
+                <div className="min-w-0">
+                  <h2 id="link-title" className="text-[14px] font-medium text-[var(--color-text-primary)]">
+                    Match a reference link
+                  </h2>
+                  <p className="text-[11.5px] text-[var(--color-text-tertiary)]">
+                    Paste a Spotify or YouTube link to find similar tracks.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setLinkModalOpen(false)}
+                aria-label="Close"
+                className="inline-flex items-center justify-center w-7 h-7 rounded-md text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                submitRefLink()
+              }}
+              className="px-5 py-5"
+            >
+              <input
+                type="text"
+                autoFocus
+                value={refLink}
+                onChange={(e) => setRefLink(e.target.value)}
+                placeholder="https://open.spotify.com/track/…  or  https://youtu.be/…"
+                className="w-full h-10 px-3 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-background)] text-[13px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] focus:outline-none focus-visible:border-[var(--color-accent)] focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)]"
+              />
+              {refLink.trim() && !refLinkValid && (
+                <p className="mt-2 text-[11.5px] text-[var(--color-text-tertiary)]">
+                  Enter a valid Spotify or YouTube link.
+                </p>
+              )}
+              <div className="mt-5 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setLinkModalOpen(false)}
+                  className="text-[12.5px] text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
+                >
+                  Cancel
+                </button>
+                <Button type="submit" size="sm" disabled={!refLinkValid}>
+                  Find similar
+                  <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Search Spotify modal */}
+      {spotifyModalOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="spotify-title"
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+        >
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setSpotifyModalOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="relative w-full max-w-md rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface-elevated)] shadow-2xl">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border-subtle)]">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-7 h-7 rounded-md border border-[var(--color-border-default)] bg-[var(--color-background)] flex items-center justify-center flex-shrink-0">
+                  <Disc3 className="w-3.5 h-3.5 text-[var(--color-accent)]" />
+                </div>
+                <div className="min-w-0">
+                  <h2 id="spotify-title" className="text-[14px] font-medium text-[var(--color-text-primary)]">
+                    Search a song on Spotify
+                  </h2>
+                  <p className="text-[11.5px] text-[var(--color-text-tertiary)]">
+                    Find any track, then discover similar music in our library.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSpotifyModalOpen(false)}
+                aria-label="Close"
+                className="inline-flex items-center justify-center w-7 h-7 rounded-md text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-ring)] transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                submitSpotifySearch()
+              }}
+              className="px-5 py-5"
+            >
+              <div className="flex items-center gap-2 h-10 px-3 rounded-md border border-[var(--color-border-subtle)] bg-[var(--color-background)] focus-within:border-[var(--color-accent)] focus-within:ring-2 focus-within:ring-[var(--color-accent-ring)] transition-colors">
+                <Search className="w-3.5 h-3.5 text-[var(--color-text-tertiary)] flex-shrink-0" />
+                <input
+                  type="text"
+                  autoFocus
+                  value={spotifyQuery}
+                  onChange={(e) => setSpotifyQuery(e.target.value)}
+                  placeholder="Song or artist name…"
+                  className="flex-1 bg-transparent text-[13px] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] outline-none"
+                />
+              </div>
+              <div className="mt-5 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSpotifyModalOpen(false)}
+                  className="text-[12.5px] text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
+                >
+                  Cancel
+                </button>
+                <Button type="submit" size="sm" disabled={!spotifyQuery.trim()}>
+                  Find similar
+                  <ArrowRight className="ml-1.5 w-3.5 h-3.5" />
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </main>
