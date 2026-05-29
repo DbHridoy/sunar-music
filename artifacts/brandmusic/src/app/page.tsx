@@ -4,7 +4,6 @@ import {
   Search,
   Waves,
   Layers,
-  Check,
   Plus,
   Minus,
   Video,
@@ -41,48 +40,6 @@ const proof = [
   '50,000 Tracks',
   'Stems',
   'Video sync preview',
-]
-
-const plans = [
-  {
-    name: 'Starter',
-    price: '$0',
-    cadence: '/ forever',
-    blurb: 'Start Searching and try video sync.',
-    features: ['Unlimited search', 'Video sync previews', 'Personal shortlists'],
-    cta: 'Start Searching',
-    href: '/library',
-    featured: false,
-  },
-  {
-    name: 'Studio',
-    price: '$49',
-    cadence: '/ seat / mo',
-    blurb: 'For agencies licensing music often.',
-    features: [
-      'Everything in Starter',
-      'Stems on every track',
-      'Shared team shortlists',
-    ],
-    cta: 'Start Searching',
-    href: '/library',
-    featured: true,
-  },
-  {
-    name: 'Enterprise',
-    price: 'Custom',
-    cadence: '',
-    blurb: 'For brand teams and broadcast.',
-    features: [
-      'Everything in Studio',
-      'Custom commissions',
-      'Sonic branding workshops',
-      'Dedicated account team',
-    ],
-    cta: 'Start Searching',
-    href: '/library',
-    featured: false,
-  },
 ]
 
 const faqs = [
@@ -328,75 +285,6 @@ export default function Home() {
                 </div>
               )
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing preview */}
-      <section className="py-20 border-t border-[var(--color-border-subtle)]">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="max-w-2xl mb-12">
-            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
-              Pricing
-            </span>
-            <h2 className="h-display text-[32px] md:text-[40px] mt-3">
-              Straightforward, per seat.
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-3">
-            {plans.map((p) => (
-              <div
-                key={p.name}
-                className={`rounded-lg border p-6 flex flex-col ${
-                  p.featured
-                    ? 'border-[var(--color-accent)] bg-[var(--color-surface-elevated)]'
-                    : 'border-[var(--color-border-subtle)] bg-[var(--color-surface)]'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-5">
-                  <span className="text-[14px] font-medium text-[var(--color-text-primary)]">
-                    {p.name}
-                  </span>
-                  {p.featured && (
-                    <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
-                      Popular
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-baseline gap-1.5 mb-3">
-                  <span className="h-display text-[32px] text-[var(--color-text-primary)]">
-                    {p.price}
-                  </span>
-                  {p.cadence && (
-                    <span className="text-[12px] text-[var(--color-text-tertiary)]">
-                      {p.cadence}
-                    </span>
-                  )}
-                </div>
-                <p className="text-[13px] text-[var(--color-text-secondary)] mb-5">{p.blurb}</p>
-                <ul className="space-y-2.5 mb-6 flex-1">
-                  {p.features.map((f) => (
-                    <li
-                      key={f}
-                      className="flex items-start gap-2.5 text-[13px] text-[var(--color-text-secondary)]"
-                    >
-                      <Check className="w-3.5 h-3.5 text-[var(--color-accent)] mt-0.5 flex-shrink-0" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href={p.href}>
-                  <Button
-                    size="md"
-                    variant={p.featured ? 'primary' : 'outline'}
-                    fullWidth
-                  >
-                    {p.cta}
-                  </Button>
-                </Link>
-              </div>
-            ))}
           </div>
         </div>
       </section>

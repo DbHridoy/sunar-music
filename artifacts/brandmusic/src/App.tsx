@@ -4,9 +4,9 @@ import "@/app/globals.css";
 
 import HomePage from "@/app/page";
 import LibraryPage from "@/app/library/page";
+import PricingPage from "@/app/pricing/page";
 
 // --- Disabled pages (uncomment imports + routes below to re-enable) ---
-// import PricingPage from "@/app/pricing/page";
 // import ServicesPage from "@/app/services/page";
 // import EnterprisePage from "@/app/enterprise/page";
 // import ProductPage from "@/app/product/page";
@@ -29,6 +29,7 @@ function AppRoutes() {
   return (
     <Switch>
       <Route path="/library" component={LibraryPage} />
+      <Route path="/pricing" component={PricingPage} />
       <Route path="/" component={HomePage} />
 
       {/* --- Disabled routes (uncomment to re-enable; also uncomment imports above) ---

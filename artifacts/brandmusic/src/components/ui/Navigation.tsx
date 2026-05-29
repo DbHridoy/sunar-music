@@ -31,8 +31,13 @@ export default function Navigation() {
             >
               Browse Music
             </Link>
+            <Link
+              href="/pricing"
+              className="text-[13px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+            >
+              Pricing
+            </Link>
             {/* --- Disabled nav links (uncomment to re-enable) ---
-            <Link href="/pricing" className="text-[13px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">Pricing</Link>
             <Link href="/services" className="text-[13px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">Services</Link>
             <Link href="/enterprise" className="text-[13px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">For Enterprise</Link>
             */}
@@ -69,8 +74,14 @@ export default function Navigation() {
             >
               Browse Music
             </Link>
+            <Link
+              href="/pricing"
+              className="block py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Pricing
+            </Link>
             {/* --- Disabled mobile nav links (uncomment to re-enable) ---
-            <Link href="/pricing" className="block py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors" onClick={() => setIsOpen(false)}>Pricing</Link>
             <Link href="/services" className="block py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors" onClick={() => setIsOpen(false)}>Services</Link>
             <Link href="/enterprise" className="block py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors" onClick={() => setIsOpen(false)}>For Enterprise</Link>
             */}
