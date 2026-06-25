@@ -37,14 +37,6 @@ export default function Navigation() {
             >
               Pricing
             </Link>
-            {/* --- Disabled nav links (uncomment to re-enable) ---
-            <Link href="/services" className="text-[13px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">Services</Link>
-            <Link href="/enterprise" className="text-[13px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">For Enterprise</Link>
-            */}
-            {/* --- Disabled auth links (uncomment to re-enable) ---
-            <Link href="/login"><Button variant="ghost" size="sm">Log in</Button></Link>
-            <Link href="/signup"><Button size="sm">Start Free</Button></Link>
-            */}
           </div>
 
           <button
@@ -81,16 +73,6 @@ export default function Navigation() {
             >
               Pricing
             </Link>
-            {/* --- Disabled mobile nav links (uncomment to re-enable) ---
-            <Link href="/services" className="block py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors" onClick={() => setIsOpen(false)}>Services</Link>
-            <Link href="/enterprise" className="block py-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors" onClick={() => setIsOpen(false)}>For Enterprise</Link>
-            */}
-            {/* --- Disabled mobile auth links (uncomment to re-enable) ---
-            <div className="pt-3 mt-2 border-t border-[var(--color-border-subtle)]">
-              <Link href="/login" onClick={() => setIsOpen(false)}><Button variant="ghost" size="sm" fullWidth>Log in</Button></Link>
-              <Link href="/signup" onClick={() => setIsOpen(false)}><Button size="sm" fullWidth>Start Free</Button></Link>
-            </div>
-            */}
           </div>
         </div>
       )}
