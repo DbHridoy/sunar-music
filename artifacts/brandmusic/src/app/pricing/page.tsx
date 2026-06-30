@@ -156,6 +156,18 @@ export default function PricingPage() {
               )
             })}
           </div>
+
+          <div className="mt-12 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-8 md:p-10 text-center">
+            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+              Flexible Licensing
+            </span>
+            <h2 className="h-display text-[22px] md:text-[26px] mt-3 leading-[1.15]">
+              Need one track, not a subscription?
+            </h2>
+            <p className="mt-4 text-[15px] text-[var(--color-text-secondary)] leading-relaxed max-w-2xl mx-auto">
+              You can still license individual tracks without a monthly plan. Search the catalog, find the right sound, and license music on a project-by-project basis whenever you need it.
+            </p>
+          </div>
         </div>
       </section>
 
