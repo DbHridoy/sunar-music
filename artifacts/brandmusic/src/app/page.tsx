@@ -168,10 +168,10 @@ export default function Home() {
                     <s.icon className="w-4 h-4" style={{ color: s.color }} />
                   </span>
                 </div>
-                <h3 className="text-[15px] font-medium text-[var(--color-text-primary)] mb-2">
+                <h3 className="text-[15px] font-medium text-[var(--color-text-primary)] mb-2 text-center">
                   {s.title}
                 </h3>
-                <p className="text-[13.5px] text-[var(--color-text-secondary)] leading-relaxed">
+                <p className="text-[13.5px] text-[var(--color-text-secondary)] leading-relaxed text-center">
                   {s.body}
                 </p>
               </div>
