@@ -53,15 +53,15 @@ export default function PricingPage() {
 
       <section className="relative pt-32 pb-12 overflow-hidden">
         <div className="absolute inset-0 hero-glow pointer-events-none" />
-        <div className="relative z-10 max-w-6xl mx-auto px-6">
-          <div className="max-w-2xl">
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+          <div>
             <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
               Pricing
             </span>
             <h1 className="h-display text-[40px] md:text-[56px] mt-3 leading-[1.05]">
               Straightforward, per seat.
             </h1>
-            <p className="mt-4 text-[15px] text-[var(--color-text-secondary)] leading-relaxed">
+            <p className="mt-4 text-[15px] text-[var(--color-text-secondary)] leading-relaxed max-w-2xl mx-auto">
               Start free and upgrade when your team licenses regularly. No hidden fees, no surprise sync charges.
             </p>
 
