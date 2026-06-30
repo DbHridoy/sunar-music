@@ -253,7 +253,7 @@ export default function Home() {
                         <f.icon className="w-4 h-4" style={{ color: f.color }} />
                       </div>
                       <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-tertiary)]">
-                        {f.eyebrow} · {String(idx + 1).padStart(2, '0')}
+                        {f.eyebrow}
                       </span>
                     </div>
                     <h3 className="h-display text-[26px] md:text-[32px] mb-4">
